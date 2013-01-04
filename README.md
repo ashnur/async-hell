@@ -1,4 +1,4 @@
 async-hell
 ==========
 
-The inept scripters struggle with  asynchronicity.
+The inept scripter's struggle with  asynchronicity.
