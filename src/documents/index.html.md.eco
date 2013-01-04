@@ -1,0 +1,34 @@
+---
+layout: 'default'
+---
+
+This is not a how-to or a tutorial. This is not something you want to copy. This is not about what you are doing wrong, or what should you do instead of what you are already doing.
+
+This is me, having trouble with async code.
+
+It's not that I don't get it, because I do. I know how to avoid the rightwards pointing arrow of callback hell. I've spent the last week trying to understand approaches to async code, and I am still struggling. Now this is not unusual for me, but this time it's really frustrating. So I will try something new, and I will write down what I've learned. This way I hope I can understand even more, and if anyone takes the time, maybe they too can help me out.
+
+My issue is that whenever I write any kind of async code, I find myself hating the end result. It's usually ugly and not easily readable. Either the order of function declarations doesn't make sense, or that the flow feels bloated with unnecessary constructs which seems arbitrary and independent from my intentions.
+
+What I would like to do is to have async code, which isn't ugly, the flow is clear to anyone, even if he/she doesn't quite know what the async lib I am using does behind the scenes, and it should be simplistic, minimalistic.
+
+Now anyone can cry about how hard the life of a programmer is (it isn't, really), but without examples these are just empty words.
+So lets see if I can show you what I am talking about.
+
+First, some sync code to start up things. It will not be a practical example, so we can focus on the constructs.
+
+```
+<%- @getFile({'name':'sync.start.js'}).toJSON().source %>
+```
+
+This is obviously a very silly code, but otherwise I hope it's straightforward. When this function runs, all three of the variables a, b, c should have a value larger then a third of the goal value. If this is not true, the code is malfunctioning.
+The A, B, C functions are the same because I am too lazy to imagine three different functions, but this should not matter. If it does, please let me know and I will come up with different functions.
+
+Now lets get dirty, this is how I imagine this in an async form, with unnamed callbacks:
+
+```
+<%- @getFile({'name':'cbhell.js'}).toJSON().source %>
+```
+
+Now, obviously the A, B, C functions do not depend on each other, but the new result function, which checks if we achieved our goal, do depend on every one of them, so I already have a problem. I could pass B to A to be called, when A finished, and C to B, then Result to C. This would work, but it's kinda stupid, as one of the best things in the async code is that multiple things happen  at the same time, in parallel.
+Another thing the beginner scripter would think, that I could write a functions which periodically checks if all of the values are larger then 0. gt

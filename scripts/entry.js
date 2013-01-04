@@ -1,0 +1,2 @@
+void function(root){
+}(this)
