@@ -38,7 +38,8 @@
     "docpad-plugin-partials": "2.x",
     "docpad-plugin-stylus": "2.x",
     "docpad-plugin-text": "2.x",
-    "docpad-plugin-highlightjs": "~2.1.1"
+    "docpad-plugin-highlightjs": "~2.1.1",
+    "async": "~0.1.22"
   },
   "devDependencies": {
     "docpad-plugin-livereload": "2.x"

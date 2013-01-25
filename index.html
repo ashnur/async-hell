@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <!-- Standard Meta -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Site Properities -->
+    <title>Async-hell</title>
+    <meta name="description" content="The inept scripter's struggle with asynchronicity." />
+    <meta name="keywords" content="javascript, asynchronicity, callbacks, promises, deferreds, futures, async, ashnur" />
+
+    <!-- DocPad Meta -->
+    <meta http-equiv="X-Powered-By" content="DocPad"/>
+
+    <!-- DocPad Styles + Our Own -->
+    <link  rel="stylesheet" href="/vendor/normalize.css" /><link  rel="stylesheet" href="/styles/style.css" /><link  rel="stylesheet" href="/styles/googlecode.css" /><link  rel="stylesheet" href="/styles/site.css" />
+
+    <!-- Icons -->
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/icons/favicon.ico" />
+    <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+    <link rel="apple-touch-icon-precomposed" href="icons/apple-touch-icon-57x57-precomposed.png" />
+    <!-- For first- and second-generation iPad: -->
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="icons/apple-touch-icon-72x72-precomposed.png" />
+    <!-- For iPhone with high-resolution Retina display: -->
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="icons/apple-touch-icon-114x114-precomposed.png" />
+    <!-- For third-generation iPad with high-resolution Retina display: -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="icons/apple-touch-icon-144x144-precomposed.png" />
+</head>
+<body>
+    <!--[if lt IE 7]>
+        <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+    <![endif]-->
+
+    <header></header>
+    <article>
+        <h1>Async Hell</h1>
+<p>This is not a guide on best practice. This is not something you want to copy. This is me, having trouble (again) with coding.
+
+</p>
+<p>My issue is that whenever I write any kind of asynchronous code, I find myself hating the end result. It&#39;s usually ugly and not easily readable. Either the order of function declarations doesn&#39;t make sense, or that the flow feels bloated with unnecessary constructs which seems arbitrary and independent from my intentions.
+
+</p>
+<p>What I would like to do is to have code, which isn&#39;t ugly, the flow is clear to anyone, even if he/she doesn&#39;t quite know what the asynchronous lib I am using does behind the scenes. I like code which is simplistic and minimalistic in nature.
+
+</p>
+<p>Now anyone can cry about how hard the life of a scripter is (it isn&#39;t, really), but without examples these are just empty words.
+So lets see if I can show you what I am talking about.
+
+</p>
+<p>One more note. I despise short, 3-4 line, out of context examples. I think it&#39;s not good, because most of the time you can&#39;t test it or try it without doing some more research, which the author obviously was lazy to do. So my code examples would be complete an runnable. This doesn&#39;t mean they will make any sense. :)
+
+</p>
+<h4>Synchronous demo</h4>
+<p>First, some sync code to start up things. It will not be a practical example, so we can focus on the constructs.
+
+</p>
+<pre class="highlighted"><code class="javascript"><span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
+    <span class="string">'use strict'</span>;
+
+    <span class="keyword">var</span> subject = Object.create(<span class="literal">null</span>), sum = <span class="number">0</span>, root = <span class="number">0</span>;
+
+    <span class="function"><span class="keyword">function</span> <span class="title">isInt</span><span class="params">(n)</span> {</span> <span class="keyword">return</span> n % <span class="number">1</span> === <span class="number">0</span>; }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">check</span><span class="params">(object, level)</span>{</span>
+        <span class="keyword">return</span> <span class="keyword">typeof</span> object[level] !== <span class="string">'undefined'</span>;
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">set</span><span class="params">(object, level)</span>{</span> <span class="keyword">return</span> object[level] = Object.create(<span class="literal">null</span>) ; }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">write</span><span class="params">(object)</span>{</span> object.value = Math.floor(Math.random() * <span class="number">98</span>) + <span class="number">1</span>; }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">findLevels</span><span class="params">(object)</span>{</span>
+        <span class="keyword">var</span> levels = [];
+        (<span class="function"><span class="keyword">function</span> <span class="title">fl</span><span class="params">(obj, levelIndex)</span>{</span>
+            <span class="keyword">var</span> currentLevel=obj[<span class="string">'level'</span>+levelIndex];
+            <span class="keyword">if</span> ( currentLevel != <span class="literal">null</span> ) {
+                levels[levelIndex] = currentLevel ;
+                fl(currentLevel, levelIndex+<span class="number">1</span>);
+            }
+        }(object, <span class="number">0</span>));
+        <span class="keyword">return</span> levels;
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">makeDivisble</span><span class="params">(object)</span>{</span>
+        <span class="keyword">var</span> levels = findLevels(object);
+        levels.forEach(
+            <span class="keyword">function</span>(obj){
+                <span class="keyword">var</span> diff;
+                <span class="keyword">if</span> ( diff = obj.value % levels.length ) {
+                    obj.value -= diff;
+                }
+            }
+        );
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">mean</span><span class="params">(object)</span>{</span>
+        <span class="keyword">var</span> levels = findLevels(object),
+            mean = levels.reduce(
+                <span class="keyword">function</span>(a, b){ <span class="keyword">return</span> (a.value || a) + b.value; },
+                <span class="number">0</span>
+            ) / levels.length;
+
+
+        levels.forEach(<span class="keyword">function</span>(obj){
+            <span class="keyword">var</span> val = obj.value;
+            obj.value = val*(mean/levels.length);
+        });
+    }
+
+    <span class="keyword">if</span> ( ! check(subject, <span class="string">'level0'</span>) ) set(subject, <span class="string">'level0'</span>);
+    write(subject.level0);
+
+    <span class="keyword">if</span> ( ! check(subject.level0, <span class="string">'level1'</span>) ) set(subject.level0, <span class="string">'level1'</span>);
+    write(subject.level0.level1);
+
+    <span class="keyword">if</span> ( ! check(subject.level0.level1, <span class="string">'level2'</span>) ) {
+        set(subject.level0.level1, <span class="string">'level2'</span>);
+    }
+    write(subject.level0.level1.level2);
+
+    <span class="keyword">if</span> ( ! check(subject.level0.level1.level2, <span class="string">'level3'</span>) ) {
+        set(subject.level0.level1.level2, <span class="string">'level3'</span>);
+    }
+    write(subject.level0.level1.level2.level3);
+
+    makeDivisble(subject);
+
+    mean(subject);
+
+    sum = findLevels(subject).reduce(
+            <span class="keyword">function</span>(a, b){ <span class="keyword">return</span> (a.value || a) + b.value; }, <span class="number">0</span>);
+
+    <span class="keyword">if</span> ( isInt(root = Math.sqrt(sum)) ) {
+        console.log(<span class="string">'success'</span>, JSON.stringify(subject), sum, root);
+    } <span class="keyword">else</span> {
+        console.error(<span class="string">'failure'</span>,JSON.stringify(subject), sum, root);
+    }
+
+}();</code></pre>
+<p>Of course this is a very silly code, because there is no way those <code>if</code>s would return true, but please play along.  Another note here is that this little piece of code could be improved a lot if all I wanted to have <code>subject.level0.level1.level2</code> with the sum of level values being a square number, but my focus right now is on the <code>check</code>, <code>set</code>, <code>write</code>, <code>add</code> and <code>mean</code> functions. It&#39;s not even what they do what is important but their role, and their dependence on each other. All else is just scenery.
+
+</p>
+<h4>Behold the Pyramids of Doom</h4>
+<p>This is how I imagine the same script if the three functions are asynchronous and all I am allowed to use are unnamed callbacks:
+
+</p>
+<pre class="highlighted"><code class="javascript"><span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
+    <span class="string">'use strict'</span>;
+
+    <span class="keyword">var</span> subject = Object.create(<span class="literal">null</span>), sum = <span class="number">0</span>, root = <span class="number">0</span>;
+
+    <span class="function"><span class="keyword">function</span> <span class="title">isInt</span><span class="params">(n)</span> {</span> <span class="keyword">return</span> n % <span class="number">1</span> === <span class="number">0</span>; }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">check</span><span class="params">(object, level, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span> cb(<span class="keyword">typeof</span> object[level] !== <span class="string">'undefined'</span>); }
+        setTimeout(task, Math.random()*<span class="number">3000</span>);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">set</span><span class="params">(object, level, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span> object[level] = Object.create(<span class="literal">null</span>); cb(); }
+        setTimeout(task, Math.random()*<span class="number">3000</span>);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">write</span><span class="params">(object, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
+            cb(object.value = Math.floor(Math.random() * <span class="number">1000</span>) + <span class="number">1</span>);
+        }
+        setTimeout(task, Math.random()*<span class="number">3000</span>);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">findLevels</span><span class="params">(object)</span>{</span>
+        <span class="keyword">var</span> levels = [];
+        (<span class="function"><span class="keyword">function</span> <span class="title">fl</span><span class="params">(obj, levelIndex)</span>{</span>
+            <span class="keyword">var</span> currentLevel=obj[<span class="string">'level'</span>+levelIndex];
+            <span class="keyword">if</span> ( currentLevel != <span class="literal">null</span> ) {
+                levels[levelIndex] = currentLevel;
+                fl(currentLevel, levelIndex+<span class="number">1</span>);
+            }
+        }(object, <span class="number">0</span>));
+        <span class="keyword">return</span> levels;
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">makeDivisble</span><span class="params">(object, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
+            <span class="keyword">var</span> levels = findLevels(object);
+            levels.forEach(
+                <span class="keyword">function</span>(obj){
+                    <span class="keyword">var</span> diff;
+                    <span class="keyword">if</span> ( diff = obj.value % levels.length ) {
+                        obj.value += -<span class="number">1</span> *diff;
+                    }
+                }
+            );
+            cb();
+        }
+        setTimeout(task, Math.random()*<span class="number">3000</span>);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">mean</span><span class="params">(object, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
+            <span class="keyword">var</span> levels = findLevels(object),
+                mean = levels.reduce(
+                    <span class="keyword">function</span>(a, b){ <span class="keyword">return</span> (a.value || a) + b.value; },
+                    <span class="number">0</span>
+                ) / levels.length;
+
+
+            levels.forEach(<span class="keyword">function</span>(obj){
+                <span class="keyword">var</span> val = obj.value;
+                obj.value = val*(mean/levels.length);
+            });
+            cb();
+        }
+        setTimeout(task, Math.random()*<span class="number">3000</span>);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">result</span><span class="params">(object)</span>{</span>
+        sum = findLevels(object).reduce(
+                <span class="keyword">function</span>(a, b){ <span class="keyword">return</span> (a.value || a) + b.value; }, <span class="number">0</span>);
+
+        <span class="keyword">if</span> ( isInt(root = Math.sqrt(sum)) ) {
+            console.log(<span class="string">'success'</span>, JSON.stringify(object), sum, root);
+        } <span class="keyword">else</span> {
+            console.error(<span class="string">'failure'</span>,JSON.stringify(object), sum, root);
+        }
+    }
+
+    check(subject, <span class="string">'level0'</span>, <span class="keyword">function</span>(exists){
+        <span class="keyword">if</span> ( ! exists ) {
+            set(subject, <span class="string">'level0'</span>, <span class="keyword">function</span>(){
+                write(subject.level0, <span class="keyword">function</span>(){
+                    check(subject.level0, <span class="string">'level1'</span>, <span class="keyword">function</span>(exists){
+                        <span class="keyword">if</span> ( ! exists ) {
+                            set(subject.level0, <span class="string">'level1'</span>, <span class="keyword">function</span>(){
+                                write(subject.level0.level1, <span class="keyword">function</span>(){
+                                    check(subject.level0.level1, <span class="string">'level2'</span>,
+                                        <span class="keyword">function</span>(exists){
+                                            <span class="keyword">if</span> ( ! exists ) {
+                                                set(subject.level0.level1,
+                                                    <span class="string">'level2'</span>,
+                                                    <span class="keyword">function</span>(){
+                                                        write(subject.level0.level1.level2,
+                                                            <span class="keyword">function</span>(){
+                                                                makeDivisble(subject,
+                                                                    <span class="keyword">function</span>(){
+                                                                        mean(subject,
+                                                                            <span class="keyword">function</span>(){
+                                                                                result(subject);
+                                                                            }
+                                                                        );
+                                                                    }
+                                                                );
+                                                            }
+                                                        );
+                                                    }
+                                                );
+                                            } <span class="keyword">else</span> {
+                                                write(subject.level0.level1.level2,
+                                                    <span class="keyword">function</span>(){
+                                                        makeDivisble(subject,
+                                                            <span class="keyword">function</span>(){
+                                                                mean(subject,
+                                                                    <span class="keyword">function</span>(){
+                                                                        result(subject);
+                                                                    }
+                                                                );
+                                                            }
+                                                        );
+                                                    }
+                                                );
+                                            }
+                                        }
+                                    );
+                                });
+                            });
+                        } <span class="keyword">else</span> {
+                            write(subject.level0.level1, <span class="keyword">function</span>(){
+                                check(subject.level0.level1, <span class="string">'level2'</span>,
+                                    <span class="keyword">function</span>(exists){
+                                        <span class="keyword">if</span> ( ! exists ) {
+                                            set(subject.level0.level1,
+                                                <span class="string">'level2'</span>,
+                                                <span class="keyword">function</span>(){
+                                                    write(subject.level0.level1.level2,
+                                                        <span class="keyword">function</span>(){
+                                                            makeDivisble(subject,
+                                                                <span class="keyword">function</span>(){
+                                                                    mean(subject,
+                                                                        <span class="keyword">function</span>(){
+                                                                            result(subject);
+                                                                        }
+                                                                    );
+                                                                }
+                                                            );
+                                                        }
+                                                    );
+                                                }
+                                            );
+                                        } <span class="keyword">else</span> {
+                                            write(subject.level0.level1.level2,
+                                                <span class="keyword">function</span>(){
+                                                    makeDivisble(subject,
+                                                        <span class="keyword">function</span>(){
+                                                            mean(subject,
+                                                                <span class="keyword">function</span>(){
+                                                                    result(subject);
+                                                                }
+                                                            );
+                                                        }
+                                                    );
+                                                }
+                                            );
+                                        }
+                                    }
+                                );
+                            });
+                        }
+                    });
+                });
+            });
+        } <span class="keyword">else</span> {
+            write(subject.level0, <span class="keyword">function</span>(){
+                check(subject.level0, <span class="string">'level1'</span>, <span class="keyword">function</span>(exists){
+                    <span class="keyword">if</span> ( ! exists ) {
+                        set(subject.level0, <span class="string">'level1'</span>, <span class="keyword">function</span>(){
+                            write(subject.level0.level1, <span class="keyword">function</span>(){
+                                check(subject.level0.level1, <span class="string">'level2'</span>,
+                                    <span class="keyword">function</span>(exists){
+                                        <span class="keyword">if</span> ( ! exists ) {
+                                            set(subject.level0.level1,
+                                                <span class="string">'level2'</span>,
+                                                <span class="keyword">function</span>(){
+                                                    write(subject.level0.level1.level2,
+                                                        <span class="keyword">function</span>(){
+                                                            makeDivisble(subject,
+                                                                <span class="keyword">function</span>(){
+                                                                    mean(subject,
+                                                                        <span class="keyword">function</span>(){
+                                                                            result(subject);
+                                                                        }
+                                                                    );
+                                                                }
+                                                            );
+                                                        }
+                                                    );
+                                                }
+                                            );
+                                        } <span class="keyword">else</span> {
+                                            write(subject.level0.level1.level2,
+                                                <span class="keyword">function</span>(){
+                                                    makeDivisble(subject,
+                                                        <span class="keyword">function</span>(){
+                                                            mean(subject,
+                                                                <span class="keyword">function</span>(){
+                                                                    result(subject);
+                                                                }
+                                                            );
+                                                        }
+                                                    );
+                                                }
+                                            );
+                                        }
+                                    }
+                                );
+                            });
+                        });
+                    } <span class="keyword">else</span> {
+                        write(subject.level0.level1, <span class="keyword">function</span>(){
+                            check(subject.level0.level1, <span class="string">'level2'</span>,
+                                <span class="keyword">function</span>(exists){
+                                    <span class="keyword">if</span> ( ! exists ) {
+                                        set(subject.level0.level1,
+                                            <span class="string">'level2'</span>,
+                                            <span class="keyword">function</span>(){
+                                                write(subject.level0.level1.level2,
+                                                    <span class="keyword">function</span>(){
+                                                        makeDivisble(subject,
+                                                            <span class="keyword">function</span>(){
+                                                                mean(subject,
+                                                                    <span class="keyword">function</span>(){
+                                                                        result(subject);
+                                                                    }
+                                                                );
+                                                            }
+                                                        );
+                                                    }
+                                                );
+                                            }
+                                        );
+                                    } <span class="keyword">else</span> {
+                                        write(subject.level0.level1.level2,
+                                            <span class="keyword">function</span>(){
+                                                makeDivisble(subject,
+                                                    <span class="keyword">function</span>(){
+                                                        mean(subject,
+                                                            <span class="keyword">function</span>(){
+                                                                result(subject);
+                                                            }
+                                                        );
+                                                    }
+                                                );
+                                            }
+                                        );
+                                    }
+                                }
+                            );
+                        });
+                    }
+                });
+            });
+        }
+    });
+
+}();</code></pre>
+<p>Cute, isn&#39;t it? Now I dare you to check if that code is doing what it supposed to do without pushing the run button. :D
+Obviously, this is crazyness and no sane people will ever write such a code. Most of it is going away as soon as I start naming the functions, and use higher order functions to generate callbacks so that I don&#39;t have to repeat them over and over again.
+
+</p>
+<h4>Functions of functions</h4>
+<pre class="highlighted"><code class="javascript"><span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
+    <span class="string">'use strict'</span>;
+
+    <span class="keyword">var</span> subject = Object.create(<span class="literal">null</span>), sum = <span class="number">0</span>, root = <span class="number">0</span>, levelCount = <span class="number">3</span>,
+        maxCallbackTime = <span class="number">1000</span>;
+
+    <span class="function"><span class="keyword">function</span> <span class="title">isInt</span><span class="params">(n)</span> {</span> <span class="keyword">return</span> n % <span class="number">1</span> === <span class="number">0</span>; }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">check</span><span class="params">(object, level, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span> cb(<span class="keyword">typeof</span> object[level] !== <span class="string">'undefined'</span>); }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">set</span><span class="params">(object, level, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span> object[level] = Object.create(<span class="literal">null</span>); cb(); }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">write</span><span class="params">(object, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
+            cb(object.value = Math.floor(Math.random() * <span class="number">1000</span>) + <span class="number">1</span>);
+        }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">findLevels</span><span class="params">(object)</span>{</span>
+        <span class="keyword">var</span> levels = [];
+        (<span class="function"><span class="keyword">function</span> <span class="title">fl</span><span class="params">(obj, levelIndex)</span>{</span>
+            <span class="keyword">var</span> currentLevel=obj[<span class="string">'level'</span>+levelIndex];
+            <span class="keyword">if</span> ( currentLevel != <span class="literal">null</span> ) {
+                levels[levelIndex] = currentLevel;
+                fl(currentLevel, levelIndex+<span class="number">1</span>);
+            }
+        }(object, <span class="number">0</span>));
+        <span class="keyword">return</span> levels;
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">makeDivisble</span><span class="params">(object, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
+            <span class="keyword">var</span> levels = findLevels(object);
+            levels.forEach(
+                <span class="keyword">function</span>(obj){
+                    <span class="keyword">var</span> diff;
+                    <span class="keyword">if</span> ( diff = obj.value % levels.length ) {
+                        obj.value += -<span class="number">1</span> *diff;
+                    }
+                }
+            );
+            cb();
+        }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">mean</span><span class="params">(object, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
+            <span class="keyword">var</span> levels = findLevels(object),
+                mean = levels.reduce(
+                    <span class="keyword">function</span>(a, b){ <span class="keyword">return</span> (a.value || a) + b.value; },
+                    <span class="number">0</span>
+                )/levels.length/levels.length;
+
+
+            levels.forEach(<span class="keyword">function</span>(obj){
+                <span class="keyword">var</span> val = obj.value;
+                obj.value = val*mean;
+            });
+            cb();
+        }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">result</span><span class="params">(object)</span>{</span>
+        sum = findLevels(object).reduce(
+                <span class="keyword">function</span>(a, b){ <span class="keyword">return</span> (a.value || a) + b.value; }, <span class="number">0</span>);
+
+        <span class="keyword">if</span> ( isInt(root = Math.sqrt(sum)) ) {
+            console.log(<span class="string">'success'</span>, JSON.stringify(object), sum, root);
+        } <span class="keyword">else</span> {
+            console.error(<span class="string">'failure'</span>,JSON.stringify(object), sum, root);
+        }
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">createWriter</span><span class="params">(obj, level, cb)</span>{</span> <span class="keyword">return</span> <span class="keyword">function</span>(){
+        write(obj[level], cb);
+    }; }
+
+    (<span class="function"><span class="keyword">function</span> <span class="title">run</span><span class="params">(object, level)</span>{</span>
+        <span class="keyword">var</span> currentLevel = <span class="string">'level'</span>+level;
+        <span class="keyword">if</span> ( level &lt; levelCount ) {
+            check(object, currentLevel, <span class="keyword">function</span>(exists){
+                <span class="keyword">if</span> ( ! exists ) {
+                    set(object, currentLevel, createWriter(
+                            object,
+                            currentLevel,
+                            <span class="keyword">function</span>(){run(object[currentLevel], level+<span class="number">1</span>);}
+                        )
+                    );
+                } <span class="keyword">else</span> {
+                    write(object[currentLevel],<span class="keyword">function</span>(){
+                        run(object[currentLevel],level+<span class="number">1</span>);
+                    });
+                }
+            });
+        } <span class="keyword">else</span> {
+            makeDivisble(subject, <span class="keyword">function</span>(){
+                mean(subject, <span class="keyword">function</span>(){ result(subject); });
+            });
+        }
+    }(subject, <span class="number">0</span>));
+}();</code></pre>
+<p>Now please scroll back to the sync version, read that, then come back here and compare the two. I think it&#39;s clear that even though this is a very simple script, it&#39;s highly obfuscated compared to the original one. I think this is not because of the use of a recursive function, because that actually simplifies a lot of the code, but because of the order of function calls. Reading this version it is not clear, without careful observation of all the code, what is going to happen and in what order.
+The code which runs at last is in the middle, because I like to have function declarations before I actually use them. This way you have to read like watching a yo-yo tournament. Of course one might try adding the functions after they are called, but I believe that would be even more confusing, and maybe wrong too.
+
+</p>
+<h4>Caolan&#39;s async</h4>
+<p>I suspect that I am not the only one having a bit trouble with asynchronous code style, because there are zillions of asynchronous libs and approaches. The one which is one of mosts straightforward ones is caolan&#39;s <code>async</code> lib.
+
+</p>
+<pre class="highlighted"><code class="javascript"><span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
+    <span class="string">'use strict'</span>;
+
+    <span class="keyword">var</span> subject = Object.create(<span class="literal">null</span>), sum = <span class="number">0</span>, root = <span class="number">0</span>, levelcount = <span class="number">3</span>,
+        maxCallbackTime = <span class="number">1000</span>, async = require(<span class="string">'async'</span>);
+
+    <span class="function"><span class="keyword">function</span> <span class="title">isInt</span><span class="params">(n)</span> {</span> <span class="keyword">return</span> n % <span class="number">1</span> === <span class="number">0</span>; }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">check</span><span class="params">(object, level, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span> cb(<span class="keyword">typeof</span> object[level] !== <span class="string">'undefined'</span>); }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">set</span><span class="params">(object, level, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span> object[level] = Object.create(<span class="literal">null</span>); cb(); }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">write</span><span class="params">(object, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
+            object.value = Math.floor(Math.random() * <span class="number">1000</span>) + <span class="number">1</span>;
+            cb();
+        }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">findLevels</span><span class="params">(object)</span>{</span>
+        <span class="keyword">var</span> levels = [];
+        (<span class="function"><span class="keyword">function</span> <span class="title">fl</span><span class="params">(obj, levelIndex)</span>{</span>
+            <span class="keyword">var</span> currentLevel=obj[<span class="string">'level'</span>+levelIndex];
+            <span class="keyword">if</span> ( currentLevel != <span class="literal">null</span> ) {
+                levels[levelIndex] = currentLevel;
+                fl(currentLevel, levelIndex+<span class="number">1</span>);
+            }
+        }(object, <span class="number">0</span>));
+        <span class="keyword">return</span> levels;
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">makeDivisible</span><span class="params">(object, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
+            <span class="keyword">var</span> levels = findLevels(object);
+            levels.forEach(
+                <span class="keyword">function</span>(obj){
+                    <span class="keyword">var</span> diff;
+                    <span class="keyword">if</span> ( diff = obj.value % levels.length ) {
+                        obj.value += -<span class="number">1</span> *diff;
+                    }
+                }
+            );
+            cb();
+        }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">mean</span><span class="params">(object, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
+            <span class="keyword">var</span> levels = findLevels(object),
+                mean = levels.reduce(
+                    <span class="keyword">function</span>(a, b){ <span class="keyword">return</span> (a.value || a) + b.value; },
+                    <span class="number">0</span>
+                )/levels.length/levels.length;
+
+
+            levels.forEach(<span class="keyword">function</span>(obj){
+                <span class="keyword">var</span> val = obj.value;
+                obj.value = val*mean;
+            });
+            cb();
+        }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">result</span><span class="params">(object)</span>{</span>
+        sum = findLevels(object).reduce(
+                <span class="keyword">function</span>(a, b){ <span class="keyword">return</span> (a.value || a) + b.value; }, <span class="number">0</span>);
+
+        <span class="keyword">if</span> ( isInt(root = Math.sqrt(sum)) ) {
+            console.log(<span class="string">'success'</span>, JSON.stringify(object), sum, root);
+        } <span class="keyword">else</span> {
+            console.error(<span class="string">'failure'</span>,JSON.stringify(object), sum, root);
+        }
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">createWriter</span><span class="params">(obj, level, cb)</span>{</span> <span class="keyword">return</span> <span class="keyword">function</span>(){
+        write(obj[level], cb);
+    }; }
+
+    async.auto({
+        build_levels: <span class="keyword">function</span>(cb){
+            <span class="keyword">var</span> i, tasks=[];
+            <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt; levelcount; i++ ) {
+                tasks[i] = <span class="keyword">function</span>(i){
+                    <span class="keyword">return</span> <span class="keyword">function</span>(object, callback){
+                        <span class="keyword">var</span> currentLevel = <span class="string">'level'</span>+i;
+                        <span class="keyword">if</span> ( callback == <span class="literal">null</span> ) {
+                            callback = object;
+                            object = subject;
+                        }
+                        check(object, currentLevel, <span class="keyword">function</span>(exists){
+                            <span class="keyword">if</span> ( ! exists ) {
+                                set(object, currentLevel, createWriter(
+                                        object,
+                                        currentLevel,
+                                        <span class="keyword">function</span>(){
+                                            callback(<span class="literal">null</span>, object[currentLevel]);
+                                        }
+                                    )
+                                );
+                            } <span class="keyword">else</span> {
+                                write(object[currentLevel],
+                                    <span class="keyword">function</span>(){
+                                        callback(<span class="literal">null</span>, object[currentLevel]);
+                                    }
+                                );
+                            }
+                        });
+                    };
+                }(i);
+            }
+            async.waterfall(tasks, cb);
+        },
+        makeDivisible : [<span class="string">'build_levels'</span>, <span class="keyword">function</span>(cb){
+            makeDivisible(subject, cb);
+        }],
+        mean : [<span class="string">'makeDivisible'</span>, <span class="keyword">function</span>(cb){
+            mean(subject, cb);
+        }],
+        result : [<span class="string">'mean'</span>, <span class="keyword">function</span>(){
+            result(subject);
+        }]
+    });
+}();</code></pre>
+<p>This async lib is really great. I kinda like it the best from all the solutiouns I&#39;ve seen until now. But when you get to the more complicated flows, you either don&#39;t use it, or you get ugly constructs like this. For the most part it is very clear what&#39;s happening, but the waterfall tasks construction is crazy. I wish I would never ever have to write code like this again. It feels redundant, and you really have to know the async API to get, why it&#39;s like this. ( And because this is the first version of this article, I really hope someone more experienced will come along and show me a much better alternative for this).
+
+</p>
+<h4>Promises, deferreds and vows</h4>
+<p>The latest and greats of all async approaches are the promises. The web is full of the different implementations, there is even specs for it, and last year even Mr. Douglas &quot;Javascript&#39;s foremost authority&quot; Crockford praised them, describing a minimal implementation of them, which he called VOW.js</p>
+
+    </article>
+    <footer></footer>
+
+
+    <!-- DocPad Scripts + Our Own -->
+    <script >(function(){
+	// Add the depedency if it doesn't already exist
+if ( typeof io === 'undefined' ) {
+	var t = document.createElement('script');
+	t.type = 'text/javascript';
+	t.async = true;
+	t.src = '/socket.io/socket.io.js';
+	t.onload = function(){
+
+// Listen for the regenerated event
+// and perform a reload of the page when the event occurs
+var socket = io.connect('/docpad-live-reload');
+socket.on('regenerated',function(){
+	document.location.reload();
+});
+
+	};
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(t,s);
+}
+})();</script><script defer="defer"  src="/vendor/modernizr.js"></script><script defer="defer"  src="/scripts/bundle.js"></script>
+</body>
+</html>

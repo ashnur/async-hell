@@ -1,26 +1,83 @@
 void function (){
     'use strict';
 
-    var a = 0, b = 0, c = 0, res = 0, goal = 210, part = goal/3;
+    var subject = Object.create(null), sum = 0, root = 0;
 
-    function A(){ return Math.random()*100; }
+    function isInt(n) { return n % 1 === 0; }
 
-    function B(){ return Math.random()*100; }
+    function check(object, level){
+        return typeof object[level] !== 'undefined';
+    }
 
-    function C(){ return Math.random()*100; }
+    function set(object, level){ return object[level] = Object.create(null) ; }
 
-    function D(v){ return Math.random() * v + part - v; }
+    function write(object){ object.value = Math.floor(Math.random() * 98) + 1; }
 
-    if ( (a = A()) < part ) { a += D(a); }
+    function findLevels(object){
+        var levels = [];
+        (function fl(obj, levelIndex){
+            var currentLevel=obj['level'+levelIndex];
+            if ( currentLevel != null ) {
+                levels[levelIndex] = currentLevel ;
+                fl(currentLevel, levelIndex+1);
+            }
+        }(object, 0));
+        return levels;
+    }
 
-    if ( (b = B()) < part ) { b += D(b); }
+    function makeDivisble(object){
+        var levels = findLevels(object);
+        levels.forEach(
+            function(obj){
+                var diff;
+                if ( diff = obj.value % levels.length ) {
+                    obj.value -= diff;
+                }
+            }
+        );
+    }
 
-    if ( (c = C()) < part ) { c += D(c); }
+    function mean(object){
+        var levels = findLevels(object),
+            mean = levels.reduce(
+                function(a, b){ return (a.value || a) + b.value; },
+                0
+            ) / levels.length;
 
-    if ( (res = a + b + c) > goal ) {
-        console.log('success', res);
+
+        levels.forEach(function(obj){
+            var val = obj.value;
+            obj.value = val*(mean/levels.length);
+        });
+    }
+
+    if ( ! check(subject, 'level0') ) set(subject, 'level0');
+    write(subject.level0);
+
+    if ( ! check(subject.level0, 'level1') ) set(subject.level0, 'level1');
+    write(subject.level0.level1);
+
+    if ( ! check(subject.level0.level1, 'level2') ) {
+        set(subject.level0.level1, 'level2');
+    }
+    write(subject.level0.level1.level2);
+
+    if ( ! check(subject.level0.level1.level2, 'level3') ) {
+        set(subject.level0.level1.level2, 'level3');
+    }
+    write(subject.level0.level1.level2.level3);
+
+    makeDivisble(subject);
+
+    mean(subject);
+
+    sum = findLevels(subject).reduce(
+            function(a, b){ return (a.value || a) + b.value; }, 0);
+
+    if ( isInt(root = Math.sqrt(sum)) ) {
+        console.log('success', JSON.stringify(subject), sum, root);
     } else {
-        console.error('fail', res);
+        console.error('failure',JSON.stringify(subject), sum, root);
     }
 
 }();

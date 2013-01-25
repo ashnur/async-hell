@@ -2,33 +2,56 @@
 layout: 'default'
 ---
 
-This is not a how-to or a tutorial. This is not something you want to copy. This is not about what you are doing wrong, or what should you do instead of what you are already doing.
+#Async Hell
 
-This is me, having trouble with async code.
+This is not a guide on best practice. This is not something you want to copy. This is me, having trouble (again) with coding.
 
-It's not that I don't get it, because I do. I know how to avoid the rightwards pointing arrow of callback hell. I've spent the last week trying to understand approaches to async code, and I am still struggling. Now this is not unusual for me, but this time it's really frustrating. So I will try something new, and I will write down what I've learned. This way I hope I can understand even more, and if anyone takes the time, maybe they too can help me out.
+My issue is that whenever I write any kind of asynchronous code, I find myself hating the end result. It's usually ugly and not easily readable. Either the order of function declarations doesn't make sense, or that the flow feels bloated with unnecessary constructs which seems arbitrary and independent from my intentions.
 
-My issue is that whenever I write any kind of async code, I find myself hating the end result. It's usually ugly and not easily readable. Either the order of function declarations doesn't make sense, or that the flow feels bloated with unnecessary constructs which seems arbitrary and independent from my intentions.
+What I would like to do is to have code, which isn't ugly, the flow is clear to anyone, even if he/she doesn't quite know what the asynchronous lib I am using does behind the scenes. I like code which is simplistic and minimalistic in nature.
 
-What I would like to do is to have async code, which isn't ugly, the flow is clear to anyone, even if he/she doesn't quite know what the async lib I am using does behind the scenes, and it should be simplistic, minimalistic.
-
-Now anyone can cry about how hard the life of a programmer is (it isn't, really), but without examples these are just empty words.
+Now anyone can cry about how hard the life of a scripter is (it isn't, really), but without examples these are just empty words.
 So lets see if I can show you what I am talking about.
+
+One more note. I despise short, 3-4 line, out of context examples. I think it's not good, because most of the time you can't test it or try it without doing some more research, which the author obviously was lazy to do. So my code examples would be complete an runnable. This doesn't mean they will make any sense. :)
+
+#### Synchronous demo
 
 First, some sync code to start up things. It will not be a practical example, so we can focus on the constructs.
 
-```
+``` javascript
 <%- @getFile({'name':'sync.start.js'}).toJSON().source %>
 ```
 
-This is obviously a very silly code, but otherwise I hope it's straightforward. When this function runs, all three of the variables a, b, c should have a value larger then a third of the goal value. If this is not true, the code is malfunctioning.
-The A, B, C functions are the same because I am too lazy to imagine three different functions, but this should not matter. If it does, please let me know and I will come up with different functions.
+Of course this is a very silly code, because there is no way those `if`s would return true, but please play along.  Another note here is that this little piece of code could be improved a lot if all I wanted to have `subject.level0.level1.level2` with the sum of level values being a square number, but my focus right now is on the `check`, `set`, `write`, `add` and `mean` functions. It's not even what they do what is important but their role, and their dependence on each other. All else is just scenery.
 
-Now lets get dirty, this is how I imagine this in an async form, with unnamed callbacks:
+#### Behold the Pyramids of Doom
 
-```
+This is how I imagine the same script if the three functions are asynchronous and all I am allowed to use are unnamed callbacks:
+
+``` javascript
 <%- @getFile({'name':'cbhell.js'}).toJSON().source %>
 ```
 
-Now, obviously the A, B, C functions do not depend on each other, but the new result function, which checks if we achieved our goal, do depend on every one of them, so I already have a problem. I could pass B to A to be called, when A finished, and C to B, then Result to C. This would work, but it's kinda stupid, as one of the best things in the async code is that multiple things happen  at the same time, in parallel.
-Another thing the beginner scripter would think, that I could write a functions which periodically checks if all of the values are larger then 0. gt
+Cute, isn't it? Now I dare you to check if that code is doing what it supposed to do without pushing the run button. :D
+Obviously, this is crazyness and no sane people will ever write such a code. Most of it is going away as soon as I start naming the functions, and use higher order functions to generate callbacks so that I don't have to repeat them over and over again.
+
+#### Functions of functions
+``` javascript
+<%- @getFile({'name':'cbhell.improved.js'}).toJSON().source %>
+```
+
+Now please scroll back to the sync version, read that, then come back here and compare the two. I think it's clear that even though this is a very simple script, it's highly obfuscated compared to the original one. I think this is not because of the use of a recursive function, because that actually simplifies a lot of the code, but because of the order of function calls. Reading this version it is not clear, without careful observation of all the code, what is going to happen and in what order.
+The code which runs at last is in the middle, because I like to have function declarations before I actually use them. This way you have to read like watching a yo-yo tournament. Of course one might try adding the functions after they are called, but I believe that would be even more confusing, and maybe wrong too.
+
+#### Caolan's async
+I suspect that I am not the only one having a bit trouble with asynchronous code style, because there are zillions of asynchronous libs and approaches. The one which is one of mosts straightforward ones is caolan's `async` lib.
+
+``` javascript
+<%- @getFile({'name':'async.lib.js'}).toJSON().source %>
+```
+
+This async lib is really great. I kinda like it the best from all the solutiouns I've seen until now. But when you get to the more complicated flows, you either don't use it, or you get ugly constructs like this. For the most part it is very clear what's happening, but the waterfall tasks construction is crazy. I wish I would never ever have to write code like this again. It feels redundant, and you really have to know the async API to get, why it's like this. ( And because this is the first version of this article, I really hope someone more experienced will come along and show me a much better alternative for this).
+
+#### Promises, deferreds and vows
+The latest and greats of all async approaches are the promises. The web is full of the different implementations, there is even specs for it, and last year even Mr. Douglas "Javascript's foremost authority" Crockford praised them, describing a minimal implementation of them, which he called VOW.js

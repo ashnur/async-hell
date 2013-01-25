@@ -1,4 +1,16 @@
-body > article {
-  width: 80ex;
+body {
+  width: 80%;
   margin: 0 auto;
+}
+body > article {
+  min-width: 86ex;
+  max-width: 80%;
+  margin: 0 auto;
+  font-family: serif;
+  font-size: 170%;
+}
+pre {
+  font-family: monospace;
+  font-size: 70%;
+  line-height: 1.2em;
 }
