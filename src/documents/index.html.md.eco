@@ -54,4 +54,9 @@ I suspect that I am not the only one having a bit trouble with asynchronous code
 This async lib is really great. I kinda like it the best from all the solutiouns I've seen until now. But when you get to the more complicated flows, you either don't use it, or you get ugly constructs like this. For the most part it is very clear what's happening, but the waterfall tasks construction is crazy. I wish I would never ever have to write code like this again. It feels redundant, and you really have to know the async API to get, why it's like this. ( And because this is the first version of this article, I really hope someone more experienced will come along and show me a much better alternative for this).
 
 #### Promises, deferreds and vows
-The latest and greats of all async approaches are the promises. The web is full of the different implementations, there is even specs for it, and last year even Mr. Douglas "Javascript's foremost authority" Crockford praised them, describing a minimal implementation of them, which he called VOW.js
+The latest and greats of all async approaches are the promises. The web is full of the different implementations, there is even specs for it, and last year even Mr. Douglas "Javascript's foremost authority" Crockford praised them, describing a minimal implementation of them, which he called VOW.js. After all promises are not a new concept, they are around since the seventies.
+First I wanted to try to use VOW.js but as it turns out, it doesn't follow the A+ spec, and I kinda feel like that's an error with it. So instead I will use midekoo's deferred lib, which also doesn't follow the A+ specs, but it does this intentionally.
+
+``` javascript
+<%- @getFile({'name':'deferred.lib.js'}).toJSON().source %>
+```

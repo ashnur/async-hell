@@ -186,7 +186,7 @@ So lets see if I can show you what I am talking about.
         <span class="keyword">return</span> levels;
     }
 
-    <span class="function"><span class="keyword">function</span> <span class="title">makeDivisble</span><span class="params">(object, cb)</span>{</span>
+    <span class="function"><span class="keyword">function</span> <span class="title">makeDivisible</span><span class="params">(object, cb)</span>{</span>
         <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
             <span class="keyword">var</span> levels = findLevels(object);
             levels.forEach(
@@ -247,7 +247,7 @@ So lets see if I can show you what I am talking about.
                                                     <span class="keyword">function</span>(){
                                                         write(subject.level0.level1.level2,
                                                             <span class="keyword">function</span>(){
-                                                                makeDivisble(subject,
+                                                                makeDivisible(subject,
                                                                     <span class="keyword">function</span>(){
                                                                         mean(subject,
                                                                             <span class="keyword">function</span>(){
@@ -263,7 +263,7 @@ So lets see if I can show you what I am talking about.
                                             } <span class="keyword">else</span> {
                                                 write(subject.level0.level1.level2,
                                                     <span class="keyword">function</span>(){
-                                                        makeDivisble(subject,
+                                                        makeDivisible(subject,
                                                             <span class="keyword">function</span>(){
                                                                 mean(subject,
                                                                     <span class="keyword">function</span>(){
@@ -289,7 +289,7 @@ So lets see if I can show you what I am talking about.
                                                 <span class="keyword">function</span>(){
                                                     write(subject.level0.level1.level2,
                                                         <span class="keyword">function</span>(){
-                                                            makeDivisble(subject,
+                                                            makeDivisible(subject,
                                                                 <span class="keyword">function</span>(){
                                                                     mean(subject,
                                                                         <span class="keyword">function</span>(){
@@ -305,7 +305,7 @@ So lets see if I can show you what I am talking about.
                                         } <span class="keyword">else</span> {
                                             write(subject.level0.level1.level2,
                                                 <span class="keyword">function</span>(){
-                                                    makeDivisble(subject,
+                                                    makeDivisible(subject,
                                                         <span class="keyword">function</span>(){
                                                             mean(subject,
                                                                 <span class="keyword">function</span>(){
@@ -338,7 +338,7 @@ So lets see if I can show you what I am talking about.
                                                 <span class="keyword">function</span>(){
                                                     write(subject.level0.level1.level2,
                                                         <span class="keyword">function</span>(){
-                                                            makeDivisble(subject,
+                                                            makeDivisible(subject,
                                                                 <span class="keyword">function</span>(){
                                                                     mean(subject,
                                                                         <span class="keyword">function</span>(){
@@ -354,7 +354,7 @@ So lets see if I can show you what I am talking about.
                                         } <span class="keyword">else</span> {
                                             write(subject.level0.level1.level2,
                                                 <span class="keyword">function</span>(){
-                                                    makeDivisble(subject,
+                                                    makeDivisible(subject,
                                                         <span class="keyword">function</span>(){
                                                             mean(subject,
                                                                 <span class="keyword">function</span>(){
@@ -380,7 +380,7 @@ So lets see if I can show you what I am talking about.
                                             <span class="keyword">function</span>(){
                                                 write(subject.level0.level1.level2,
                                                     <span class="keyword">function</span>(){
-                                                        makeDivisble(subject,
+                                                        makeDivisible(subject,
                                                             <span class="keyword">function</span>(){
                                                                 mean(subject,
                                                                     <span class="keyword">function</span>(){
@@ -396,7 +396,7 @@ So lets see if I can show you what I am talking about.
                                     } <span class="keyword">else</span> {
                                         write(subject.level0.level1.level2,
                                             <span class="keyword">function</span>(){
-                                                makeDivisble(subject,
+                                                makeDivisible(subject,
                                                     <span class="keyword">function</span>(){
                                                         mean(subject,
                                                             <span class="keyword">function</span>(){
@@ -460,7 +460,7 @@ Obviously, this is crazyness and no sane people will ever write such a code. Mos
         <span class="keyword">return</span> levels;
     }
 
-    <span class="function"><span class="keyword">function</span> <span class="title">makeDivisble</span><span class="params">(object, cb)</span>{</span>
+    <span class="function"><span class="keyword">function</span> <span class="title">makeDivisible</span><span class="params">(object, cb)</span>{</span>
         <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
             <span class="keyword">var</span> levels = findLevels(object);
             levels.forEach(
@@ -527,7 +527,7 @@ Obviously, this is crazyness and no sane people will ever write such a code. Mos
                 }
             });
         } <span class="keyword">else</span> {
-            makeDivisble(subject, <span class="keyword">function</span>(){
+            makeDivisible(subject, <span class="keyword">function</span>(){
                 mean(subject, <span class="keyword">function</span>(){ result(subject); });
             });
         }
@@ -677,7 +677,126 @@ The code which runs at last is in the middle, because I like to have function de
 
 </p>
 <h4>Promises, deferreds and vows</h4>
-<p>The latest and greats of all async approaches are the promises. The web is full of the different implementations, there is even specs for it, and last year even Mr. Douglas &quot;Javascript&#39;s foremost authority&quot; Crockford praised them, describing a minimal implementation of them, which he called VOW.js</p>
+<p>The latest and greats of all async approaches are the promises. The web is full of the different implementations, there is even specs for it, and last year even Mr. Douglas &quot;Javascript&#39;s foremost authority&quot; Crockford praised them, describing a minimal implementation of them, which he called VOW.js. After all promises are not a new concept, they are around since the seventies.
+First I wanted to try to use VOW.js but as it turns out, it doesn&#39;t follow the A+ spec, and I kinda feel like that&#39;s an error with it. So instead I will use midekoo&#39;s deferred lib, which also doesn&#39;t follow the A+ specs, but it does this intentionally.
+
+</p>
+<pre class="highlighted"><code class="javascript"><span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
+    <span class="string">'use strict'</span>;
+
+    <span class="keyword">var</span> subject = Object.create(<span class="literal">null</span>), sum = <span class="number">0</span>, root = <span class="number">0</span>, levelCount = <span class="number">3</span>,
+        maxCallbackTime = <span class="number">1000</span>, promisify = require(<span class="string">'deferred'</span>).promisify;
+
+    <span class="function"><span class="keyword">function</span> <span class="title">isInt</span><span class="params">(n)</span> {</span> <span class="keyword">return</span> n % <span class="number">1</span> === <span class="number">0</span>; }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">check</span><span class="params">(object, level, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
+            <span class="keyword">if</span> ( <span class="keyword">typeof</span> object[level] === <span class="string">'undefined'</span> ) {
+                cb(<span class="keyword">new</span> Error(<span class="string">'this is really sad, but '</span>+
+                        <span class="string">'medikoo doesn\'t believe in functions which would'</span> +
+                        <span class="string">'return only true/false'</span>));
+            } <span class="keyword">else</span> {
+                cb();
+            }
+        }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">set</span><span class="params">(object, level, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span> object[level] = Object.create(<span class="literal">null</span>); cb(); }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">write</span><span class="params">(object, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
+            cb(<span class="literal">null</span>, object.value = Math.floor(Math.random() * <span class="number">1000</span>) + <span class="number">1</span>);
+        }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">findLevels</span><span class="params">(object)</span>{</span>
+        <span class="keyword">var</span> levels = [];
+        (<span class="function"><span class="keyword">function</span> <span class="title">fl</span><span class="params">(obj, levelIndex)</span>{</span>
+            <span class="keyword">var</span> currentLevel=obj[<span class="string">'level'</span>+levelIndex];
+            <span class="keyword">if</span> ( currentLevel != <span class="literal">null</span> ) {
+                levels[levelIndex] = currentLevel;
+                fl(currentLevel, levelIndex+<span class="number">1</span>);
+            }
+        }(object, <span class="number">0</span>));
+        <span class="keyword">return</span> levels;
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">makeDivisible</span><span class="params">(object, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
+            <span class="keyword">var</span> levels = findLevels(object);
+            levels.forEach(
+                <span class="keyword">function</span>(obj){
+                    <span class="keyword">var</span> diff;
+                    <span class="keyword">if</span> ( diff = obj.value % levels.length ) {
+                        obj.value += -<span class="number">1</span> *diff;
+                    }
+                }
+            );
+            cb();
+        }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">mean</span><span class="params">(object, cb)</span>{</span>
+        <span class="function"><span class="keyword">function</span> <span class="title">task</span><span class="params">()</span>{</span>
+            <span class="keyword">var</span> levels = findLevels(object),
+                mean = levels.reduce(
+                    <span class="keyword">function</span>(a, b){ <span class="keyword">return</span> (a.value || a) + b.value; },
+                    <span class="number">0</span>
+                )/levels.length/levels.length;
+
+
+            levels.forEach(<span class="keyword">function</span>(obj){
+                <span class="keyword">var</span> val = obj.value;
+                obj.value = val*mean;
+            });
+            cb();
+        }
+        setTimeout(task, Math.random()*maxCallbackTime);
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">result</span><span class="params">(object, cb)</span>{</span>
+        sum = findLevels(object).reduce(
+                <span class="keyword">function</span>(a, b){ <span class="keyword">return</span> (a.value || a) + b.value; }, <span class="number">0</span>);
+
+        <span class="keyword">if</span> ( isInt(root = Math.sqrt(sum)) ) {
+            console.log(<span class="string">'success'</span>, JSON.stringify(object), sum, root);
+        } <span class="keyword">else</span> {
+            console.error(<span class="string">'failure'</span>,JSON.stringify(object), sum, root);
+        }
+        cb();
+    }
+
+    <span class="keyword">var</span> chk = promisify(check);
+    <span class="keyword">var</span> st = promisify(set);
+    <span class="keyword">var</span> wrt = promisify(write);
+    <span class="keyword">var</span> mkdv = promisify(makeDivisible);
+    <span class="keyword">var</span> mn = promisify(mean);
+    <span class="keyword">var</span> rslt = promisify(result);
+
+    chk(subject,<span class="string">'level0'</span>)
+    (<span class="literal">null</span>,<span class="keyword">function</span>(){<span class="keyword">return</span> st(subject,<span class="string">'level0'</span>)})
+    (<span class="keyword">function</span>(){<span class="keyword">return</span> wrt(subject.level0)})
+
+    (<span class="keyword">function</span>(){<span class="keyword">return</span> chk(subject.level0,<span class="string">'level1'</span>)})
+    (<span class="literal">null</span>,<span class="keyword">function</span>(){<span class="keyword">return</span> st(subject.level0,<span class="string">'level1'</span>)})
+    (<span class="keyword">function</span>(){<span class="keyword">return</span> wrt(subject.level0.level1)})
+
+    (<span class="keyword">function</span>(){<span class="keyword">return</span> chk(subject.level0.level1,<span class="string">'level2'</span>)})
+    (<span class="literal">null</span>,<span class="keyword">function</span>(){<span class="keyword">return</span> st(subject.level0.level1,<span class="string">'level2'</span>)})
+    (<span class="keyword">function</span>(){<span class="keyword">return</span> wrt(subject.level0.level1.level2)})
+
+    (<span class="keyword">function</span>(){<span class="keyword">return</span> mkdv(subject)})
+    (<span class="keyword">function</span>(){<span class="keyword">return</span> mn(subject)})
+    (<span class="keyword">function</span>(){<span class="keyword">return</span> rslt(subject)})
+    .end()
+
+}();</code></pre>
 
     </article>
     <footer></footer>

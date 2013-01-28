@@ -34,7 +34,7 @@ void function (){
         return levels;
     }
 
-    function makeDivisble(object, cb){
+    function makeDivisible(object, cb){
         function task(){
             var levels = findLevels(object);
             levels.forEach(
@@ -95,7 +95,7 @@ void function (){
                                                     function(){
                                                         write(subject.level0.level1.level2,
                                                             function(){
-                                                                makeDivisble(subject,
+                                                                makeDivisible(subject,
                                                                     function(){
                                                                         mean(subject,
                                                                             function(){
@@ -111,7 +111,7 @@ void function (){
                                             } else {
                                                 write(subject.level0.level1.level2,
                                                     function(){
-                                                        makeDivisble(subject,
+                                                        makeDivisible(subject,
                                                             function(){
                                                                 mean(subject,
                                                                     function(){
@@ -137,7 +137,7 @@ void function (){
                                                 function(){
                                                     write(subject.level0.level1.level2,
                                                         function(){
-                                                            makeDivisble(subject,
+                                                            makeDivisible(subject,
                                                                 function(){
                                                                     mean(subject,
                                                                         function(){
@@ -153,7 +153,7 @@ void function (){
                                         } else {
                                             write(subject.level0.level1.level2,
                                                 function(){
-                                                    makeDivisble(subject,
+                                                    makeDivisible(subject,
                                                         function(){
                                                             mean(subject,
                                                                 function(){
@@ -186,7 +186,7 @@ void function (){
                                                 function(){
                                                     write(subject.level0.level1.level2,
                                                         function(){
-                                                            makeDivisble(subject,
+                                                            makeDivisible(subject,
                                                                 function(){
                                                                     mean(subject,
                                                                         function(){
@@ -202,7 +202,7 @@ void function (){
                                         } else {
                                             write(subject.level0.level1.level2,
                                                 function(){
-                                                    makeDivisble(subject,
+                                                    makeDivisible(subject,
                                                         function(){
                                                             mean(subject,
                                                                 function(){
@@ -228,7 +228,7 @@ void function (){
                                             function(){
                                                 write(subject.level0.level1.level2,
                                                     function(){
-                                                        makeDivisble(subject,
+                                                        makeDivisible(subject,
                                                             function(){
                                                                 mean(subject,
                                                                     function(){
@@ -244,7 +244,7 @@ void function (){
                                     } else {
                                         write(subject.level0.level1.level2,
                                             function(){
-                                                makeDivisble(subject,
+                                                makeDivisible(subject,
                                                     function(){
                                                         mean(subject,
                                                             function(){

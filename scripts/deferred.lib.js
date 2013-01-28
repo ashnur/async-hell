@@ -2,12 +2,20 @@ void function (){
     'use strict';
 
     var subject = Object.create(null), sum = 0, root = 0, levelCount = 3,
-        maxCallbackTime = 1000;
+        maxCallbackTime = 1000, promisify = require('deferred').promisify;
 
     function isInt(n) { return n % 1 === 0; }
 
     function check(object, level, cb){
-        function task(){ cb(typeof object[level] !== 'undefined'); }
+        function task(){
+            if ( typeof object[level] === 'undefined' ) {
+                cb(new Error('this is really sad, but '+
+                        'medikoo doesn\'t believe in functions which would' +
+                        'return only true/false'));
+            } else {
+                cb();
+            }
+        }
         setTimeout(task, Math.random()*maxCallbackTime);
     }
 
@@ -18,7 +26,7 @@ void function (){
 
     function write(object, cb){
         function task(){
-            cb(object.value = Math.floor(Math.random() * 1000) + 1);
+            cb(null, object.value = Math.floor(Math.random() * 1000) + 1);
         }
         setTimeout(task, Math.random()*maxCallbackTime);
     }
@@ -69,7 +77,7 @@ void function (){
         setTimeout(task, Math.random()*maxCallbackTime);
     }
 
-    function result(object){
+    function result(object, cb){
         sum = findLevels(object).reduce(
                 function(a, b){ return (a.value || a) + b.value; }, 0);
 
@@ -78,33 +86,31 @@ void function (){
         } else {
             console.error('failure',JSON.stringify(object), sum, root);
         }
+        cb();
     }
 
-    function createWriter(obj, level, cb){ return function(){
-        write(obj[level], cb);
-    }; }
+    var chk = promisify(check);
+    var st = promisify(set);
+    var wrt = promisify(write);
+    var mkdv = promisify(makeDivisible);
+    var mn = promisify(mean);
+    var rslt = promisify(result);
 
-    (function run(object, level){
-        var currentLevel = 'level'+level;
-        if ( level < levelCount ) {
-            check(object, currentLevel, function(exists){
-                if ( ! exists ) {
-                    set(object, currentLevel, createWriter(
-                            object,
-                            currentLevel,
-                            function(){run(object[currentLevel], level+1);}
-                        )
-                    );
-                } else {
-                    write(object[currentLevel],function(){
-                        run(object[currentLevel],level+1);
-                    });
-                }
-            });
-        } else {
-            makeDivisible(subject, function(){
-                mean(subject, function(){ result(subject); });
-            });
-        }
-    }(subject, 0));
+    chk(subject,'level0')
+    (null,function(){return st(subject,'level0')})
+    (function(){return wrt(subject.level0)})
+
+    (function(){return chk(subject.level0,'level1')})
+    (null,function(){return st(subject.level0,'level1')})
+    (function(){return wrt(subject.level0.level1)})
+
+    (function(){return chk(subject.level0.level1,'level2')})
+    (null,function(){return st(subject.level0.level1,'level2')})
+    (function(){return wrt(subject.level0.level1.level2)})
+
+    (function(){return mkdv(subject)})
+    (function(){return mn(subject)})
+    (function(){return rslt(subject)})
+    .end()
+
 }();
