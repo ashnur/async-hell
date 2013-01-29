@@ -1,3 +1,11 @@
+.cf:before,.cf:after
+    content:" "
+    display:table
+.cf:after
+    clear:both
+.cf
+    *zoom:1
+
 body
     width 80%
     margin 0 auto
@@ -12,4 +20,24 @@ pre
     font-family monospace
     font-size 70%
     line-height 1.2em
+    
+h4
+    clear both
+    margin 1ex 0
+
+ul.navigation
+    margin 0 
+    padding 0
+    list-style-type none
+    border-bottom 1px solid #ddd
+    text-align center
+    li
+        display inline-block
+        cursor pointer
+        margin 0 1ex
+        &:hover
+            color #a44
+
+
+
 

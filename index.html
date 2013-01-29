@@ -37,30 +37,31 @@
         <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
     <![endif]-->
 
-    <header></header>
+    <header><h1> Async Hell </h1></header>
     <article>
-        <h1>Async Hell</h1>
-<p>This is not a guide on best practice. This is not something you want to copy. This is me, having trouble (again) with coding.
+        <div id="pages">
+    <div class="page" data-order="0">
 
-</p>
-<p>My issue is that whenever I write any kind of asynchronous code, I find myself hating the end result. It&#39;s usually ugly and not easily readable. Either the order of function declarations doesn&#39;t make sense, or that the flow feels bloated with unnecessary constructs which seems arbitrary and independent from my intentions.
+<h4>Intro</h4>
+<p>This is not a guide on best practice. This is not something you want to copy. This is me, having trouble (again) with coding.</p>
 
-</p>
-<p>What I would like to do is to have code, which isn&#39;t ugly, the flow is clear to anyone, even if he/she doesn&#39;t quite know what the asynchronous lib I am using does behind the scenes. I like code which is simplistic and minimalistic in nature.
+<p>My issue is that whenever I write any kind of asynchronous code, I find myself hating the end result. It's usually ugly and not easily readable. Either the order of function declarations doesn't make sense, or that the flow feels bloated with unnecessary constructs which seems arbitrary and independent from my intentions.</p>
 
-</p>
-<p>Now anyone can cry about how hard the life of a scripter is (it isn&#39;t, really), but without examples these are just empty words.
-So lets see if I can show you what I am talking about.
+<p>What I would like to do is to have code, which isn't ugly, the flow is clear to anyone, even if he/she doesn't quite know what the asynchronous lib I am using does behind the scenes. I like code which is simplistic and minimalistic in nature.</p>
 
-</p>
-<p>One more note. I despise short, 3-4 line, out of context examples. I think it&#39;s not good, because most of the time you can&#39;t test it or try it without doing some more research, which the author obviously was lazy to do. So my code examples would be complete an runnable. This doesn&#39;t mean they will make any sense. :)
+<p>Now anyone can cry about how hard the life of a scripter is (it isn't, really), but without examples these are just empty words.</p>
+<p>So lets see if I can show you what I am talking about.</p>
 
-</p>
+<p>One more note here: I despise short, 3-4 line, out of context examples. I think it's not good, because most of the time you can't test it or try it without doing some more research, which the author obviously was lazy to do. So my code examples would be complete an runnable. This doesn't mean they will make any sense. :)</p>
+    </div>
+    <div class="page" data-order="1">
+
 <h4>Synchronous demo</h4>
-<p>First, some sync code to start up things. It will not be a practical example, so we can focus on the constructs.
 
-</p>
-<pre class="highlighted"><code class="javascript"><span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
+<p>First, some sync code to start up things. It will not be a practical example, so we can focus on the constructs.</p>
+
+<pre class="highlighted"><code class="javascript">
+<span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
     <span class="string">'use strict'</span>;
 
     <span class="keyword">var</span> subject = Object.create(<span class="literal">null</span>), sum = <span class="number">0</span>, root = <span class="number">0</span>;
@@ -142,15 +143,20 @@ So lets see if I can show you what I am talking about.
         console.error(<span class="string">'failure'</span>,JSON.stringify(subject), sum, root);
     }
 
-}();</code></pre>
-<p>Of course this is a very silly code, because there is no way those <code>if</code>s would return true, but please play along.  Another note here is that this little piece of code could be improved a lot if all I wanted to have <code>subject.level0.level1.level2</code> with the sum of level values being a square number, but my focus right now is on the <code>check</code>, <code>set</code>, <code>write</code>, <code>add</code> and <code>mean</code> functions. It&#39;s not even what they do what is important but their role, and their dependence on each other. All else is just scenery.
+}();
 
-</p>
+</code></pre></pre>
+
+<p>Of course this is a very silly code, because there is no way those `if`s would return true, but please play along.  Another note here is that this little piece of code could be improved a lot if all I wanted to have `subject.level0.level1.level2` with the sum of level values being a square number, but my focus right now is on the `check`, `set`, `write`, `add` and `mean` functions. It's not even what they do what is important but their role, and their dependence on each other. All else is just scenery.</p>
+
+    </div>
+    <div class="page" data-order="2">
 <h4>Behold the Pyramids of Doom</h4>
-<p>This is how I imagine the same script if the three functions are asynchronous and all I am allowed to use are unnamed callbacks:
 
-</p>
-<pre class="highlighted"><code class="javascript"><span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
+<p>This is how I imagine the same script if the three functions are asynchronous and all I am allowed to use are unnamed callbacks:</p>
+
+<pre class="highlighted"><code class="javascript">
+<span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
     <span class="string">'use strict'</span>;
 
     <span class="keyword">var</span> subject = Object.create(<span class="literal">null</span>), sum = <span class="number">0</span>, root = <span class="number">0</span>;
@@ -417,13 +423,18 @@ So lets see if I can show you what I am talking about.
         }
     });
 
-}();</code></pre>
-<p>Cute, isn&#39;t it? Now I dare you to check if that code is doing what it supposed to do without pushing the run button. :D
-Obviously, this is crazyness and no sane people will ever write such a code. Most of it is going away as soon as I start naming the functions, and use higher order functions to generate callbacks so that I don&#39;t have to repeat them over and over again.
+}();
 
-</p>
+</code></pre>
+
+<p>Cute, isn't it? Now I dare you to check if that code is doing what it supposed to do without pushing the run button. :D
+Obviously, this is crazyness and no sane people will ever write such a code. Most of it is going away as soon as I start naming the functions, and use higher order functions to generate callbacks so that I don't have to repeat them over and over again.</p>
+
+    </div>
+    <div class="page" data-order="3">
 <h4>Functions of functions</h4>
-<pre class="highlighted"><code class="javascript"><span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
+<pre class="highlighted"><code class="javascript">
+<span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
     <span class="string">'use strict'</span>;
 
     <span class="keyword">var</span> subject = Object.create(<span class="literal">null</span>), sum = <span class="number">0</span>, root = <span class="number">0</span>, levelCount = <span class="number">3</span>,
@@ -532,16 +543,20 @@ Obviously, this is crazyness and no sane people will ever write such a code. Mos
             });
         }
     }(subject, <span class="number">0</span>));
-}();</code></pre>
-<p>Now please scroll back to the sync version, read that, then come back here and compare the two. I think it&#39;s clear that even though this is a very simple script, it&#39;s highly obfuscated compared to the original one. I think this is not because of the use of a recursive function, because that actually simplifies a lot of the code, but because of the order of function calls. Reading this version it is not clear, without careful observation of all the code, what is going to happen and in what order.
-The code which runs at last is in the middle, because I like to have function declarations before I actually use them. This way you have to read like watching a yo-yo tournament. Of course one might try adding the functions after they are called, but I believe that would be even more confusing, and maybe wrong too.
+}();
 
-</p>
-<h4>Caolan&#39;s async</h4>
-<p>I suspect that I am not the only one having a bit trouble with asynchronous code style, because there are zillions of asynchronous libs and approaches. The one which is one of mosts straightforward ones is caolan&#39;s <code>async</code> lib.
+</code></pre>
 
-</p>
-<pre class="highlighted"><code class="javascript"><span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
+<p>Now please go back to the sync version, read that, then come back here and compare the two. I think it's clear that even though this is a very simple script, it's highly obfuscated compared to the original one. I think this is not because of the use of a recursive function, because that actually simplifies a lot of the code, but because of the order of function calls. Reading this version it is not clear, without careful observation of all the code, what is going to happen and in what order.</p>
+<p>The code which runs at last is in the middle, because I like to have function declarations before I actually use them. This way you have to read like watching a yo-yo tournament. Of course one might try adding the functions after they are called, but I believe that would be even more confusing, and maybe wrong too.</p>
+
+
+    </div>
+    <div class="page" data-order="4">
+<h4>Caolan's async</h4>
+<p>I suspect that I am not the only one having a bit trouble with asynchronous code style, because there are zillions of asynchronous libs and approaches. The one which is one of mosts straightforward ones is caolan's `async` lib.</p>
+<pre class="highlighted"><code class="javascript">
+<span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
     <span class="string">'use strict'</span>;
 
     <span class="keyword">var</span> subject = Object.create(<span class="literal">null</span>), sum = <span class="number">0</span>, root = <span class="number">0</span>, levelcount = <span class="number">3</span>,
@@ -672,16 +687,20 @@ The code which runs at last is in the middle, because I like to have function de
             result(subject);
         }]
     });
-}();</code></pre>
-<p>This async lib is really great. I kinda like it the best from all the solutiouns I&#39;ve seen until now. But when you get to the more complicated flows, you either don&#39;t use it, or you get ugly constructs like this. For the most part it is very clear what&#39;s happening, but the waterfall tasks construction is crazy. I wish I would never ever have to write code like this again. It feels redundant, and you really have to know the async API to get, why it&#39;s like this. ( And because this is the first version of this article, I really hope someone more experienced will come along and show me a much better alternative for this).
+}();
 
-</p>
+</code></pre>
+
+<p>This async lib is really great. I kinda like it the best from all the solutiouns I've seen until now. But when you get to the more complicated flows, you either don't use it, or you get ugly constructs like this. For the most part it is very clear what's happening, but the waterfall tasks construction is crazy. I wish I would never ever have to write code like this again. It feels redundant, and you really have to know the async API to get, why it's like this. ( And because this is the first version of this article, I really hope someone more experienced will come along and show me a much better alternative for this).</p>
+
+    </div>
+    <div class="page" data-order="5">
 <h4>Promises, deferreds and vows</h4>
-<p>The latest and greats of all async approaches are the promises. The web is full of the different implementations, there is even specs for it, and last year even Mr. Douglas &quot;Javascript&#39;s foremost authority&quot; Crockford praised them, describing a minimal implementation of them, which he called VOW.js. After all promises are not a new concept, they are around since the seventies.
-First I wanted to try to use VOW.js but as it turns out, it doesn&#39;t follow the A+ spec, and I kinda feel like that&#39;s an error with it. So instead I will use midekoo&#39;s deferred lib, which also doesn&#39;t follow the A+ specs, but it does this intentionally.
+<p>The latest and greats of all async approaches are the promises. The web is full of the different implementations, there is even specs for it, and last year even Mr. Douglas "Javascript's foremost authority" Crockford praised them, describing a minimal implementation of them, which he called VOW.js. After all promises are not a new concept, they are around since the seventies.</p>
+<p>First I wanted to try to use VOW.js but as it turns out, it doesn't follow the A+ spec, and I kinda feel like that's an error with it. So instead I will use midekoo's deferred lib, which also doesn't follow the A+ specs, but it does this intentionally.</p>
 
-</p>
-<pre class="highlighted"><code class="javascript"><span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
+<pre class="highlighted"><code class="javascript">
+<span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
     <span class="string">'use strict'</span>;
 
     <span class="keyword">var</span> subject = Object.create(<span class="literal">null</span>), sum = <span class="number">0</span>, root = <span class="number">0</span>, levelCount = <span class="number">3</span>,
@@ -796,8 +815,12 @@ First I wanted to try to use VOW.js but as it turns out, it doesn&#39;t follow t
     (<span class="keyword">function</span>(){<span class="keyword">return</span> rslt(subject)})
     .end()
 
-}();</code></pre>
+}();
 
+</code></pre>
+    </div>
+
+</div>
     </article>
     <footer></footer>
 
@@ -823,6 +846,6 @@ socket.on('regenerated',function(){
 	var s = document.getElementsByTagName('script')[0];
 	s.parentNode.insertBefore(t,s);
 }
-})();</script><script defer="defer"  src="/vendor/modernizr.js"></script><script defer="defer"  src="/scripts/bundle.js"></script>
+})();</script><script defer="defer"  src="/vendor/modernizr.js"></script><script defer="defer"  src="/scripts/continuum.js"></script><script defer="defer"  src="/scripts/bundle.js"></script>
 </body>
 </html>
