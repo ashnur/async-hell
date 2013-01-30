@@ -10,12 +10,12 @@ layout: 'default'
 
 <p>My issue is that whenever I write any kind of asynchronous code, I find myself hating the end result. It's usually ugly and not easily readable. Either the order of function declarations doesn't make sense, or that the flow feels bloated with unnecessary constructs which seems arbitrary and independent from my intentions.</p>
 
-<p>What I would like to do is to have code, which isn't ugly, the flow is clear to anyone, even if they doesn't quite know what the asynchronous lib I am using does behind the scenes. I like code which is simplistic and minimalistic in nature.</p>
+<p>What I would like to do is to have code which isn't ugly, the flow is clear to anyone, even if they don't quite know what the asynchronous lib I am using does behind the scenes. I like code which is simplistic and minimalistic in nature.</p>
 
 <p>Now anyone can cry about how hard the life of a scripter is (it isn't, really), but without examples these are just empty words.</p>
 <p>So lets see if I can show you what I am talking about.</p>
 
-<p>One more note here: I despise short, 3-4 line, out of context examples. I think it's not good, because most of the time you can't test it or try it without doing some more research, which the author obviously was lazy to do. So my code examples would be complete an runnable. This doesn't mean they will make any sense. :)</p>
+<p>One more note here: I despise short, 3-4 line, out of context examples. I think it's not good, because most of the time you can't test it or try it without doing some more research, which the author obviously was lazy to do. So my code examples will be complete and runnable. This doesn't mean they will make any sense. :)</p>
     </div>
     <div class="page" data-order="1" data-jssource="sync.start.js">
 
@@ -49,25 +49,25 @@ Obviously, this is crazyness and no sane people will ever write such a code. Mos
 <%- @getFile({'name':'cbhell.improved.js'}).toJSON().source %>
 </code></pre>
 
-<p>Now please go back to the sync version, read that, then come back here and compare the two. I think it's clear that even though this is a very simple script, it's highly obfuscated compared to the original one. I think this is not because of the use of a recursive function, because that actually simplifies a lot of the code, but because of the order of function calls. Reading this version it is not clear, without careful observation of all the code, what is going to happen and in what order.</p>
+<p>Now please go back to the sync version, read that, then come back here and compare the two. I think it's clear that even though this is a very simple script, it's highly obfuscated compared to the original one. I think this is not because of the use of a recursive function, because that actually simplifies a lot of the code, but because of the order of function calls. Reading this version is not clear, without careful observation of all the code, what is going to happen and in what order.</p>
 <p>The code which runs at last is in the middle, because I like to have function declarations before I actually use them. This way you have to read like watching a yo-yo tournament. Of course one might try adding the functions after they are called, but I believe that would be even more confusing, and maybe wrong too.</p>
 
 
     </div>
     <div class="page" data-order="4"  data-jssource="async.lib.js" data-jsdependency="async.js">
 <h4>Caolan's async</h4>
-<p>I suspect that I am not the only one having a bit trouble with asynchronous code style, because there are zillions of asynchronous libs and approaches. The one which is one of mosts straightforward ones is <a href="https://github.com/caolan">caolan</a>'s `<a href="https://github.com/caolan/async">async</a>` lib.</p>
+<p>I suspect that I am not the only one having a bit trouble with asynchronous code style, because there are zillions of asynchronous libs and approaches. The one which is one of most straightforward ones is <a href="https://github.com/caolan">caolan</a>'s `<a href="https://github.com/caolan/async">async</a>` lib.</p>
 <pre><code class="javascript">
 <%- @getFile({'name':'async.lib.js'}).toJSON().source %>
 </code></pre>
 
-<p>This async lib is really great. I kinda like it the best from all the solutiouns I've seen until now. But when you get to the more complicated flows, you either don't use it, or you get ugly constructs like this. For the most part it is very clear what's happening, but the waterfall tasks construction is crazy. I wish I would never ever have to write code like this again. It feels redundant, and you really have to know the async API to get, why it's like this. ( And because this is the first version of this article, I really hope someone more experienced will come along and show me a much better alternative for this).</p>
+<p>This async lib is really great. I kinda like it the most all solutions I've seen until now. But when you get to the more complicated flows, you either don't use it, or you get ugly constructs like this. For the most part it is very clear what's happening, but the waterfall tasks construction is crazy. I wish I would never ever have to write code like this again. It feels redundant, and you really have to know the async API to get why it's like this. ( And because this is the first version of this article, I really hope someone more experienced will come along and show me a much better alternative for this).</p>
 
     </div>
     <div class="page" data-order="5" data-jssource="deferred.lib.js" data-jsdependency="deferred.js">
 <h4>Promises, deferreds and vows</h4>
-<p>The latest and greats of all async approaches are the promises. The web is full of the different implementations, there is even specs for it, and last year even Mr. Douglas "Javascript's foremost authority" Crockford praised them, describing a minimal implementation of them, which he calls <a href="https://github.com/douglascrockford/monad/blob/master/vow.js">VOW.js</a>. After all promises are not a new concept, they are around since the seventies.</p>
-<p><del>First I wanted to try to use VOW.js but as it turns out, it doesn't follow the A+ spec, and I kinda feel like that's an error with it.</del> (VOW.js now supports most of the spec, there are some edge cases which fail, but nothing important.) So instead I will use <a href="https://github.com/medikoo">medikoo</a>'s <a href="https://github.com/medikoo/deferred">deferred</a> lib, which also doesn't follow the A+ specs, but it does this with a higher  purpose in mind.  </p>
+<p>The latest and greatest of all async approaches are the promises. The web is full of the different implementations, there are even specs for it, and last year even Mr. Douglas "Javascript's foremost authority" Crockford praised them, describing a minimal implementation of them, which he calls <a href="https://github.com/douglascrockford/monad/blob/master/vow.js">VOW.js</a>. After all, promises are not a new concept, they are around since the seventies.</p>
+<p><del>First I wanted to try to use VOW.js but as it turns out, it doesn't follow the A+ spec, and I kinda feel like that's an error with it.</del> (VOW.js now supports most of the spec, there are some edge cases which fail, but nothing important.) So instead I will use <a href="https://github.com/medikoo">medikoo</a>'s <a href="https://github.com/medikoo/deferred">deferred</a> lib, which also doesn't follow the A+ specs, but it does this with a higher purpose in mind.  </p>
 
 <pre><code class="javascript">
 <%- @getFile({'name':'deferred.lib.js'}).toJSON().source %>
