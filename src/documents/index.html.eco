@@ -10,7 +10,7 @@ layout: 'default'
 
 <p>My issue is that whenever I write any kind of asynchronous code, I find myself hating the end result. It's usually ugly and not easily readable. Either the order of function declarations doesn't make sense, or that the flow feels bloated with unnecessary constructs which seems arbitrary and independent from my intentions.</p>
 
-<p>What I would like to do is to have code, which isn't ugly, the flow is clear to anyone, even if he/she doesn't quite know what the asynchronous lib I am using does behind the scenes. I like code which is simplistic and minimalistic in nature.</p>
+<p>What I would like to do is to have code, which isn't ugly, the flow is clear to anyone, even if they doesn't quite know what the asynchronous lib I am using does behind the scenes. I like code which is simplistic and minimalistic in nature.</p>
 
 <p>Now anyone can cry about how hard the life of a scripter is (it isn't, really), but without examples these are just empty words.</p>
 <p>So lets see if I can show you what I am talking about.</p>
