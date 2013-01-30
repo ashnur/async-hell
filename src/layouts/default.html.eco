@@ -41,7 +41,9 @@
     <article>
         <%- @content %>
     </article>
-    <footer></footer>
+    <footer>
+        Any kind of criticism and comment is welcomed at <a href="https://github.com/ashnur/async-hell">https://github.com/ashnur/async-hell</a>. <br/>
+    </footer>
 
 
     <!-- DocPad Scripts + Our Own -->
