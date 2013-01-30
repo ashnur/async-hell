@@ -1,11 +1,12 @@
 /*global setTimeout: false, console: false */
-(function () {
+(function (global) {
 
     var async = {};
 
     // global on the server, window in the browser
-    var root = this,
+    var root = global,
         previous_async = root.async;
+
 
     async.noConflict = function () {
         root.async = previous_async;
@@ -683,18 +684,18 @@
     };
 
     // AMD / RequireJS
-    if (typeof define !== 'undefined' && define.amd) {
-        define('async', [], function () {
+    if (typeof root.define !== 'undefined' && root.define.amd) {
+        root.define('async', [], function () {
             return async;
         });
     }
     // Node.js
-    else if (typeof module !== 'undefined' && module.exports) {
-        module.exports = async;
+    else if (typeof root.module !== 'undefined' && root.module.exports) {
+        root.module.exports = async;
     }
     // included directly via <script> tag
     else {
         root.async = async;
     }
 
-}());
+}(this));

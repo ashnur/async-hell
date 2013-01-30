@@ -2683,7 +2683,7 @@ require.define("/src/files/scripts/entry.js",function(require,module,exports,__d
             , realm = function(){}
             ;
 
-        realm.evaluate = function(source){
+        realm.evaluate = function(source, showLoading){
             var console = {log:function(){konscont.text(log(arguments))}}
                 ;
             console.log('running...')
@@ -2691,10 +2691,13 @@ require.define("/src/files/scripts/entry.js",function(require,module,exports,__d
         }
 
 
-        if ( dependency ) { realm.evaluate(dependency) }
 
         bean.on(run[0], 'click', function(el){
-            realm.evaluate(script)
+            if ( dependency ) {
+                realm.evaluate(dependency+';\n'+script)
+            }else{
+                realm.evaluate(script)
+            }
         })
 
         konsole.append(run)
@@ -2708,8 +2711,31 @@ require.define("/src/files/scripts/entry.js",function(require,module,exports,__d
         navigation.append(createLi($('h4',el).text(), el))
     })
 
+    function movements(element, count){
+        var index = element.data('order')
+            , next = $('div.page[data-order='+(index<count?index+1:0)+']')
+            , prev = $('div.page[data-order='+(index<0?index-1:count-1)+']')
+            , nb = bonzo(bonzo.create('<button>')).text('Next').addClass('next')
+            , pb = bonzo(bonzo.create('<button>')).text('Previous').addClass('previous')
+            ;
+        bean.on(nb[0], 'click', function(){
+            pages.hide()
+            next.show()
+            window.scroll(0,0)
+        })
+        bean.on(pb[0], 'click', function(){
+            pages.hide()
+            prev.show()
+            window.scroll(0,0)
+        })
+        element.append(nb)
+        element.append(pb)
+    }
+
     pages.each(function(el, idx){
         var filename, dependency, dependencySource, element = bonzo(el);
+
+
         function addConsole(withDependency){
             if ( filename = element.data('jssource') ) {
                 reqwest({
@@ -2719,9 +2745,12 @@ require.define("/src/files/scripts/entry.js",function(require,module,exports,__d
                 })
                 .then(function (resp) {
                     element.append(createConsole(resp.response, withDependency))
+                }).then(function (resp) {
+                    movements(element, pages.length)
                 })
             }
         }
+
         if ( dependencySource = element.data('jsdependency') ) {
             reqwest({
                 url: './scripts/'+dependencySource
@@ -2739,7 +2768,7 @@ require.define("/src/files/scripts/entry.js",function(require,module,exports,__d
     container.prepend(navigation)
 
 
-}()
+}(this)
 
 });
 require("/src/files/scripts/entry.js");

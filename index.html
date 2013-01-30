@@ -559,7 +559,6 @@ Obviously, this is crazyness and no sane people will ever write such a code. Mos
 <span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">(global)</span>{</span>
     <span class="string">'use strict'</span>;
 
-console.log(async);
     <span class="keyword">var</span> subject = Object.create(<span class="literal">null</span>), sum = <span class="number">0</span>, root = <span class="number">0</span>, levelcount = <span class="number">3</span>,
         maxCallbackTime = <span class="number">1000</span>, async = global.async || require(<span class="string">'async'</span>);
 
@@ -701,11 +700,11 @@ console.log(async);
 <p>First I wanted to try to use VOW.js but as it turns out, it doesn't follow the A+ spec, and I kinda feel like that's an error with it. So instead I will use midekoo's deferred lib, which also doesn't follow the A+ specs, but it does this intentionally.</p>
 
 <pre class="highlighted"><code class="javascript">
-<span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
+<span class="keyword">void</span> <span class="function"><span class="keyword">function</span> <span class="params">(global)</span>{</span>
     <span class="string">'use strict'</span>;
 
     <span class="keyword">var</span> subject = Object.create(<span class="literal">null</span>), sum = <span class="number">0</span>, root = <span class="number">0</span>, levelCount = <span class="number">3</span>,
-        maxCallbackTime = <span class="number">1000</span>, promisify = deferred ? deferred.promisify : require(<span class="string">'deferred'</span>).promisify;
+        maxCallbackTime = <span class="number">1000</span>, promisify = global.deferred ? global.deferred.promisify : require(<span class="string">'deferred'</span>).promisify;
 
     <span class="function"><span class="keyword">function</span> <span class="title">isInt</span><span class="params">(n)</span> {</span> <span class="keyword">return</span> n % <span class="number">1</span> === <span class="number">0</span>; }
 
@@ -816,17 +815,39 @@ console.log(async);
     (<span class="keyword">function</span>(){<span class="keyword">return</span> rslt(subject)})
     .end()
 
-}();
+}(<span class="keyword">this</span>);
 
 </code></pre>
     </div>
 
 </div>
     </article>
-    <footer></footer>
+    <footer>
+        Any kind of criticism and comment is welcomed at <a href="https://github.com/ashnur/async-hell">https://github.com/ashnur/async-hell</a>. <br/>
+    </footer>
 
 
     <!-- DocPad Scripts + Our Own -->
-    <script defer="defer"  src="./vendor/modernizr.js"></script><script defer="defer"  src="./scripts/log.js"></script><script defer="defer"  src="./scripts/reqwest.min.js"></script><script defer="defer"  src="./scripts/bundle.js"></script>
+    <script >(function(){
+	// Add the depedency if it doesn't already exist
+if ( typeof io === 'undefined' ) {
+	var t = document.createElement('script');
+	t.type = 'text/javascript';
+	t.async = true;
+	t.src = '/socket.io/socket.io.js';
+	t.onload = function(){
+
+// Listen for the regenerated event
+// and perform a reload of the page when the event occurs
+var socket = io.connect('/docpad-live-reload');
+socket.on('regenerated',function(){
+	document.location.reload();
+});
+
+	};
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(t,s);
+}
+})();</script><script defer="defer"  src="./vendor/modernizr.js"></script><script defer="defer"  src="./scripts/log.js"></script><script defer="defer"  src="./scripts/reqwest.min.js"></script><script defer="defer"  src="./scripts/bundle.js"></script>
 </body>
 </html>
