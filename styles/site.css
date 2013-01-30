@@ -3,7 +3,8 @@
 .cf{*zoom:1}
 body{width:80%;margin:2ex auto;font-size:18px}
 body > article{min-width:86ex;max-width:80%;margin:0 auto;font-family:serif;font-size:100%}
-pre{font-family:monospace;font-size:1em;line-height:1.2em}
+pre{font-family:monospace;font-size:1em;line-height:1.2em;}
+pre code{white-space:pre;overflow:visible}
 h1{text-align:center}
 h4{clear:both;margin:1ex 0}
 ul.navigation{margin:0;padding:0;list-style-type:none;border-bottom:1px solid #ddd;text-align:center;}

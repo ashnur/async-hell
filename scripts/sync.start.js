@@ -25,7 +25,7 @@ void function (){
         return levels;
     }
 
-    function makeDivisble(object){
+    function makeDivisible(object){
         var levels = findLevels(object);
         levels.forEach(
             function(obj){
@@ -67,7 +67,7 @@ void function (){
     }
     write(subject.level0.level1.level2.level3);
 
-    makeDivisble(subject);
+    makeDivisible(subject);
 
     mean(subject);
 
