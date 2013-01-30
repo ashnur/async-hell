@@ -11,7 +11,7 @@
 }
 body {
   width: 80%;
-  margin: 0 auto;
+  margin: 2ex auto;
 }
 body > article {
   min-width: 86ex;
@@ -24,6 +24,9 @@ pre {
   font-family: monospace;
   font-size: 70%;
   line-height: 1.2em;
+}
+h1 {
+  text-align: center;
 }
 h4 {
   clear: both;
@@ -43,4 +46,8 @@ ul.navigation li {
 }
 ul.navigation li:hover {
   color: #a44;
+}
+.console {
+  background: #ddd;
+  font: normal 70% monospace;
 }

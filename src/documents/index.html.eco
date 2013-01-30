@@ -17,7 +17,7 @@ layout: 'default'
 
 <p>One more note here: I despise short, 3-4 line, out of context examples. I think it's not good, because most of the time you can't test it or try it without doing some more research, which the author obviously was lazy to do. So my code examples would be complete an runnable. This doesn't mean they will make any sense. :)</p>
     </div>
-    <div class="page" data-order="1">
+    <div class="page" data-order="1" data-jssource="sync.start.js">
 
 <h4>Synchronous demo</h4>
 
@@ -25,12 +25,12 @@ layout: 'default'
 
 <pre><code class="javascript">
 <%- @getFile({'name':'sync.start.js'}).toJSON().source %>
-</code></pre></pre>
+</code></pre>
 
 <p>Of course this is a very silly code, because there is no way those `if`s would return true, but please play along.  Another note here is that this little piece of code could be improved a lot if all I wanted to have `subject.level0.level1.level2` with the sum of level values being a square number, but my focus right now is on the `check`, `set`, `write`, `add` and `mean` functions. It's not even what they do what is important but their role, and their dependence on each other. All else is just scenery.</p>
 
     </div>
-    <div class="page" data-order="2">
+    <div class="page" data-order="2" data-jssource="cbhell.js">
 <h4>Behold the Pyramids of Doom</h4>
 
 <p>This is how I imagine the same script if the three functions are asynchronous and all I am allowed to use are unnamed callbacks:</p>
@@ -43,7 +43,7 @@ layout: 'default'
 Obviously, this is crazyness and no sane people will ever write such a code. Most of it is going away as soon as I start naming the functions, and use higher order functions to generate callbacks so that I don't have to repeat them over and over again.</p>
 
     </div>
-    <div class="page" data-order="3">
+    <div class="page" data-order="3" data-jssource="cbhell.improved.js">
 <h4>Functions of functions</h4>
 <pre><code class="javascript">
 <%- @getFile({'name':'cbhell.improved.js'}).toJSON().source %>
@@ -54,7 +54,7 @@ Obviously, this is crazyness and no sane people will ever write such a code. Mos
 
 
     </div>
-    <div class="page" data-order="4">
+    <div class="page" data-order="4"  data-jssource="async.lib.js" data-jsdependency="async.js">
 <h4>Caolan's async</h4>
 <p>I suspect that I am not the only one having a bit trouble with asynchronous code style, because there are zillions of asynchronous libs and approaches. The one which is one of mosts straightforward ones is caolan's `async` lib.</p>
 <pre><code class="javascript">
@@ -64,7 +64,7 @@ Obviously, this is crazyness and no sane people will ever write such a code. Mos
 <p>This async lib is really great. I kinda like it the best from all the solutiouns I've seen until now. But when you get to the more complicated flows, you either don't use it, or you get ugly constructs like this. For the most part it is very clear what's happening, but the waterfall tasks construction is crazy. I wish I would never ever have to write code like this again. It feels redundant, and you really have to know the async API to get, why it's like this. ( And because this is the first version of this article, I really hope someone more experienced will come along and show me a much better alternative for this).</p>
 
     </div>
-    <div class="page" data-order="5">
+    <div class="page" data-order="5" data-jssource="deferred.lib.js" data-jsdependency="deferred.js">
 <h4>Promises, deferreds and vows</h4>
 <p>The latest and greats of all async approaches are the promises. The web is full of the different implementations, there is even specs for it, and last year even Mr. Douglas "Javascript's foremost authority" Crockford praised them, describing a minimal implementation of them, which he called VOW.js. After all promises are not a new concept, they are around since the seventies.</p>
 <p>First I wanted to try to use VOW.js but as it turns out, it doesn't follow the A+ spec, and I kinda feel like that's an error with it. So instead I will use midekoo's deferred lib, which also doesn't follow the A+ specs, but it does this intentionally.</p>

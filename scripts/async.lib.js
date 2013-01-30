@@ -1,8 +1,9 @@
-void function (){
+void function (global){
     'use strict';
 
+console.log(async);
     var subject = Object.create(null), sum = 0, root = 0, levelcount = 3,
-        maxCallbackTime = 1000, async = require('async');
+        maxCallbackTime = 1000, async = global.async || require('async');
 
     function isInt(n) { return n % 1 === 0; }
 
@@ -129,4 +130,4 @@ void function (){
             result(subject);
         }]
     });
-}();
+}(this);

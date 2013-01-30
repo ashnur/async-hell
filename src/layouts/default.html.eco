@@ -45,6 +45,6 @@
 
 
     <!-- DocPad Scripts + Our Own -->
-    <%- @getBlock('scripts').add(['/vendor/modernizr.js','/scripts/continuum.js', "/scripts/bundle.js"]).toHTML() %>
+    <%- @getBlock('scripts').add([ './vendor/modernizr.js' ,'./scripts/log.js' ,'./scripts/reqwest.min.js' ,"./scripts/bundle.js" ]).toHTML() %>
 </body>
 </html>

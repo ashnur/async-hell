@@ -2,7 +2,7 @@ void function (){
     'use strict';
 
     var subject = Object.create(null), sum = 0, root = 0, levelCount = 3,
-        maxCallbackTime = 1000, promisify = require('deferred').promisify;
+        maxCallbackTime = 1000, promisify = deferred ? deferred.promisify : require('deferred').promisify;
 
     function isInt(n) { return n % 1 === 0; }
 
