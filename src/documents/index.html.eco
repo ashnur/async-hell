@@ -56,7 +56,7 @@ Obviously, this is crazyness and no sane people will ever write such a code. Mos
     </div>
     <div class="page" data-order="4"  data-jssource="async.lib.js" data-jsdependency="async.js">
 <h4>Caolan's async</h4>
-<p>I suspect that I am not the only one having a bit trouble with asynchronous code style, because there are zillions of asynchronous libs and approaches. The one which is one of mosts straightforward ones is caolan's `async` lib.</p>
+<p>I suspect that I am not the only one having a bit trouble with asynchronous code style, because there are zillions of asynchronous libs and approaches. The one which is one of mosts straightforward ones is <a href="https://github.com/caolan">caolan</a>'s `<a href="https://github.com/caolan/async">async</a>` lib.</p>
 <pre><code class="javascript">
 <%- @getFile({'name':'async.lib.js'}).toJSON().source %>
 </code></pre>
@@ -66,8 +66,8 @@ Obviously, this is crazyness and no sane people will ever write such a code. Mos
     </div>
     <div class="page" data-order="5" data-jssource="deferred.lib.js" data-jsdependency="deferred.js">
 <h4>Promises, deferreds and vows</h4>
-<p>The latest and greats of all async approaches are the promises. The web is full of the different implementations, there is even specs for it, and last year even Mr. Douglas "Javascript's foremost authority" Crockford praised them, describing a minimal implementation of them, which he called VOW.js. After all promises are not a new concept, they are around since the seventies.</p>
-<p>First I wanted to try to use VOW.js but as it turns out, it doesn't follow the A+ spec, and I kinda feel like that's an error with it. So instead I will use midekoo's deferred lib, which also doesn't follow the A+ specs, but it does this intentionally.</p>
+<p>The latest and greats of all async approaches are the promises. The web is full of the different implementations, there is even specs for it, and last year even Mr. Douglas "Javascript's foremost authority" Crockford praised them, describing a minimal implementation of them, which he calls <a href="https://github.com/douglascrockford/monad/blob/master/vow.js">VOW.js</a>. After all promises are not a new concept, they are around since the seventies.</p>
+<p><del>First I wanted to try to use VOW.js but as it turns out, it doesn't follow the A+ spec, and I kinda feel like that's an error with it.</del> (VOW.js now supports most of the spec, there are some edge cases which fail, but nothing important.) So instead I will use <a href="https://github.com/medikoo">medikoo</a>'s <a href="https://github.com/medikoo/deferred">deferred</a> lib, which also doesn't follow the A+ specs, but it does this with a higher  purpose in mind.  </p>
 
 <pre><code class="javascript">
 <%- @getFile({'name':'deferred.lib.js'}).toJSON().source %>

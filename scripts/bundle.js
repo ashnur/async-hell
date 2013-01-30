@@ -2714,7 +2714,7 @@ require.define("/src/files/scripts/entry.js",function(require,module,exports,__d
     function movements(element, count){
         var index = element.data('order')
             , next = $('div.page[data-order='+(index<count?index+1:0)+']')
-            , prev = $('div.page[data-order='+(index<0?index-1:count-1)+']')
+            , prev = $('div.page[data-order='+(index>0?index-1:count-1)+']')
             , nb = bonzo(bonzo.create('<button>')).text('Next').addClass('next')
             , pb = bonzo(bonzo.create('<button>')).text('Previous').addClass('previous')
             ;
@@ -2748,6 +2748,8 @@ require.define("/src/files/scripts/entry.js",function(require,module,exports,__d
                 }).then(function (resp) {
                     movements(element, pages.length)
                 })
+            } else {
+                movements(element, pages.length)
             }
         }
 
