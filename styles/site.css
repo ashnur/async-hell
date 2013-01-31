@@ -1,83 +1,17 @@
-.cf:before,
-.cf:after {
-  content: " ";
-  display: table;
-}
-.cf:after {
-  clear: both;
-}
-.cf {
-  *zoom: 1;
-}
-body {
-  margin: 2ex;
-  font-size: 18px;
-}
-body > article {
-  min-width: 130ex;
-  max-width: 160ex;
-  margin: 0 auto;
-  font-family: serif;
-  font-size: 100%;
-}
-pre {
-  font-family: monospace;
-  font-size: 1em;
-  line-height: 1.2em;
-  white-space: pre;
-  overflow: visible;
-}
-pre code {
-  font-size: 0.9em;
-  white-space: pre;
-  overflow: visible;
-}
-h1 {
-  text-align: center;
-}
-h4 {
-  clear: both;
-  margin: 1ex 0;
-}
-ul.navigation {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-  border-bottom: 1px solid #ddd;
-  text-align: center;
-}
-ul.navigation li {
-  display: inline-block;
-  margin: 0 1ex;
-}
-ul.navigation li a {
-  cursor: pointer;
-  color: #333;
-  text-decoration: none;
-}
-ul.navigation li a:hover {
-  color: #a44;
-  text-decoration: underline;
-}
-.console {
-  background: #ddd;
-  font: normal 1em monospace;
-}
-button.previous {
-  float: left;
-  background: #fff;
-  border: none;
-  text-decoration: underline;
-}
-button.next {
-  float: right;
-  background: #fff;
-  border: none;
-  text-decoration: underline;
-}
-footer {
-  clear: both;
-  padding-top: 2em;
-  text-align: center;
-  font: normal 80% sans-serif;
-}
+.cf:before,.cf:after{content:" ";display:table}
+.cf:after{clear:both}
+.cf{*zoom:1}
+body{margin:2ex;font-size:18px}
+body > article{min-width:130ex;max-width:160ex;margin:0 auto;font-family:serif;font-size:100%}
+pre{font-family:monospace;font-size:1em;line-height:1.2em;white-space:pre;overflow:visible;}
+pre code{font-size:.9em;white-space:pre;overflow:visible}
+h1{text-align:center}
+h4{clear:both;margin:1ex 0}
+ul.navigation{margin:0;padding:0;list-style-type:none;border-bottom:1px solid #ddd;text-align:center;}
+ul.navigation li{display:inline-block;margin:0 1ex;}
+ul.navigation li a{cursor:pointer;color:#333;text-decoration:none;}
+ul.navigation li a:hover{color:#a44;text-decoration:underline}
+.console{background:#ddd;font:normal 1em monospace}
+button.previous{float:left;background:#fff;border:none;text-decoration:underline}
+button.next{float:right;background:#fff;border:none;text-decoration:underline}
+footer{clear:both;padding-top:2em;text-align:center;font:normal 80% sans-serif}
