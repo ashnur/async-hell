@@ -10,8 +10,16 @@ void function(root){
 
     navigation.addClass('navigation').addClass('cf')
 
+    function slugify(text) {
+        text = text.replace(/[^-a-zA-Z0-9,&\s]+/ig, '');
+        text = text.replace(/-/gi, "_");
+        text = text.replace(/\s/gi, "-");
+        return text;
+    }
+
     function createLi(text, link){
-        var a = bonzo(bonzo.create('<a>')).text(text).attr('href','#'+text)
+        var slug = slugify(text)
+            , a = bonzo(bonzo.create('<a>')).text(text).attr('href','#'+slug)
             , li = bonzo(bonzo.create('<li>'))
             ;
 
