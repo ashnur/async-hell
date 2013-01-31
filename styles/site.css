@@ -49,11 +49,16 @@ ul.navigation {
 }
 ul.navigation li {
   display: inline-block;
-  cursor: pointer;
   margin: 0 1ex;
 }
-ul.navigation li:hover {
+ul.navigation li a {
+  cursor: pointer;
+  color: #333;
+  text-decoration: none;
+}
+ul.navigation li a:hover {
   color: #a44;
+  text-decoration: underline;
 }
 .console {
   background: #ddd;
