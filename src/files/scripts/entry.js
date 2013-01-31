@@ -11,8 +11,11 @@ void function(root){
     navigation.addClass('navigation').addClass('cf')
 
     function createLi(text, link){
-        var li =  bonzo(bonzo.create('<li>')).text(text)
+        var a = bonzo(bonzo.create('<a>')).text(text).attr('href','#'+text)
+            , li = bonzo(bonzo.create('<li>'))
             ;
+
+        li.append(a)
 
         bean.on(li[0], 'click', function(el){
             pages.hide()
@@ -58,23 +61,29 @@ void function(root){
 
     function movements(element, count){
         var index = element.data('order')
-            , next = $('div.page[data-order='+(index<count?index+1:0)+']')
-            , prev = $('div.page[data-order='+(index>0?index-1:count-1)+']')
-            , nb = bonzo(bonzo.create('<button>')).text('Next').addClass('next')
-            , pb = bonzo(bonzo.create('<button>')).text('Previous').addClass('previous')
+            , next, prev, nb, pb
             ;
-        bean.on(nb[0], 'click', function(){
-            pages.hide()
-            next.show()
-            window.scroll(0,0)
-        })
-        bean.on(pb[0], 'click', function(){
-            pages.hide()
-            prev.show()
-            window.scroll(0,0)
-        })
-        element.append(nb)
-        element.append(pb)
+
+        if ( index > 0 ) {
+            prev = $('div.page[data-order='+(index>0?index-1:count-1)+']')
+            pb = bonzo(bonzo.create('<button>')).text('Previous').addClass('previous')
+            bean.on(pb[0], 'click', function(){
+                pages.hide()
+                prev.show()
+                window.scroll(0,0)
+            })
+            element.append(pb)
+        }
+        if ( index < count-1 ) {
+            next = $('div.page[data-order='+(index<count-1?index+1:0)+']')
+            nb = bonzo(bonzo.create('<button>')).text('Next').addClass('next')
+            bean.on(nb[0], 'click', function(){
+                pages.hide()
+                next.show()
+                window.scroll(0,0)
+            })
+            element.append(nb)
+        }
     }
 
     pages.each(function(el, idx){
@@ -114,5 +123,14 @@ void function(root){
 
     container.prepend(navigation)
 
+    bean.on(window, 'load', function(){
+        var anchor = window.document.location.href.match(/#(.+?)$/)[0];
+        $('ul.navigation a').each(function(el){
+            var link = bonzo(el);
+            if ( link.attr('href') == anchor ) {
+                bean.fire(el, 'click')
+            }
+        })
+    })
 
 }(this)
