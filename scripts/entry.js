@@ -131,6 +131,7 @@ void function(root){
 
     container.prepend(navigation)
 
+
     bean.on(window, 'load', function(){
         var anchor = window.document.location.href.match(/#(.+?)$/)[0];
         $('ul.navigation a').each(function(el){
