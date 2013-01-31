@@ -2666,7 +2666,7 @@ require.define("/src/files/scripts/entry.js",function(require,module,exports,__d
     navigation.addClass('navigation').addClass('cf')
 
     function slugify(text) {
-        text = text.replace(/[^-a-zA-Z0-9,&\s]+/ig, '');
+        text = text.replace(/[^-a-zA-Z0-9&\s]+/ig, '');
         text = text.replace(/-/gi, "_");
         text = text.replace(/\s/gi, "-");
         return text;
@@ -2728,21 +2728,19 @@ require.define("/src/files/scripts/entry.js",function(require,module,exports,__d
             ;
 
         if ( index > 0 ) {
-            prev = $('div.page[data-order='+(index>0?index-1:count-1)+']')
+            prev = $('div.page[data-order='+(index-1)+']')
             pb = bonzo(bonzo.create('<button>')).text('Previous').addClass('previous')
             bean.on(pb[0], 'click', function(){
-                pages.hide()
-                prev.show()
+                bean.fire($('ul.navigation a[href=#'+slugify($('h4',prev).text())+']')[0], 'click')
                 window.scroll(0,0)
             })
             element.append(pb)
         }
-        if ( index < count-1 ) {
-            next = $('div.page[data-order='+(index<count-1?index+1:0)+']')
+        if ( index < (count-1) ) {
+            next = $('div.page[data-order='+(index+1)+']')
             nb = bonzo(bonzo.create('<button>')).text('Next').addClass('next')
             bean.on(nb[0], 'click', function(){
-                pages.hide()
-                next.show()
+                bean.fire($('ul.navigation a[href=#'+slugify($('h4',next).text())+']')[0], 'click')
                 window.scroll(0,0)
             })
             element.append(nb)
