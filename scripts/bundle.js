@@ -2665,8 +2665,16 @@ require.define("/src/files/scripts/entry.js",function(require,module,exports,__d
 
     navigation.addClass('navigation').addClass('cf')
 
+    function slugify(text) {
+        text = text.replace(/[^-a-zA-Z0-9,&\s]+/ig, '');
+        text = text.replace(/-/gi, "_");
+        text = text.replace(/\s/gi, "-");
+        return text;
+    }
+
     function createLi(text, link){
-        var a = bonzo(bonzo.create('<a>')).text(text).attr('href','#'+text)
+        var slug = slugify(text)
+            , a = bonzo(bonzo.create('<a>')).text(text).attr('href','#'+slug)
             , li = bonzo(bonzo.create('<li>'))
             ;
 
@@ -2777,6 +2785,7 @@ require.define("/src/files/scripts/entry.js",function(require,module,exports,__d
     })
 
     container.prepend(navigation)
+
 
     bean.on(window, 'load', function(){
         var anchor = window.document.location.href.match(/#(.+?)$/)[0];
